@@ -2,33 +2,57 @@
 Function to import the web3 object
 """
 
-import json
-
-from environ.constants import DATA_PATH
+from environ.fetch.function_caller import FunctionCaller
 from scripts.w3 import w3
 
 
-def get_account_token_balance(
-    token_address: str, account_address: str, block_identifier: int = "latest"
-):
+def token_decimal(token_address: str, block_identifier: int | str) -> int:
     """
-    Function to get the balance of a token in an account
+    Function to get the decimal of a token
     """
+    caller = FunctionCaller(token_address, w3)
+    return caller.call_function("decimals", block_identifier, erc20=True)
 
-    with open(DATA_PATH / "abi" / "erc20.json", "r", encoding="utf-8") as f:
-        erc20_abi = json.load(f)
 
-    return (
-        w3.eth.contract(address=token_address, abi=erc20_abi)
-        .functions.balanceOf(account_address)
-        .call(block_identifier=block_identifier)
+def token_balance(
+    token_address: str, account_address: str, block_identifier: int | str
+) -> int:
+    """
+    Function to get the balance of a token
+    """
+    caller = FunctionCaller(token_address, w3)
+    return caller.call_function(
+        "balanceOf", block_identifier, [account_address], erc20=True
     )
+
+
+def total_supply(token_address: str, block_identifier: int | str) -> int:
+    """
+    Function to get the total supply of a token
+    """
+    caller = FunctionCaller(token_address, w3)
+    return caller.call_function("totalSupply", block_identifier, erc20=True)
+
+
+def token_balance_normalized(
+    token_address: str, account_address: str, block_identifier: int | str
+) -> float:
+    """
+    Function to get the balance of a token
+    """
+    balance = token_balance(token_address, account_address, block_identifier)
+    decimal = token_decimal(token_address, block_identifier)
+    return balance / (10**decimal)
+
+
+def total_supply_normalized(token_address: str, block_identifier: int | str) -> float:
+    """
+    Function to get the total supply of a token
+    """
+    supply = total_supply(token_address, block_identifier)
+    decimal = token_decimal(token_address, block_identifier)
+    return supply / (10**decimal)
 
 
 if __name__ == "__main__":
-    print(
-        get_account_token_balance(
-            "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
-            "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0",
-        )
-    )
+    print(token_decimal("0x028171bCA77440897B824Ca71D1c56caC55b68A3", "latest"))

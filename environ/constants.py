@@ -13,3 +13,6 @@ SAMPLE_DATA_DICT = {
     "ftx_collapse": "2022-11-08",
     "current_date": "2023-07-01",
 }
+
+# special address
+ETH_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"

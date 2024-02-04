@@ -5,6 +5,7 @@ Aave class
 from typing import Any
 
 from environ.fetch.function_caller import FunctionCaller
+from environ.fetch.w3 import total_supply_normalized
 from scripts.w3 import w3
 
 POOL_V2_ADDRESS = "0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9"
@@ -21,7 +22,7 @@ class AaveV2:
     def __init__(self, w3) -> None:
         self.w3 = w3
 
-    def get_reserve_list(self, block_identifier: int) -> Any:
+    def get_reserve_list(self, block_identifier: int | str) -> Any:
         """
         Function to get the reserves list
         """
@@ -29,7 +30,9 @@ class AaveV2:
         caller = FunctionCaller(POOL_V2_ADDRESS, self.w3)
         return caller.call_function("getReservesList", block_identifier)
 
-    def get_all_reservs_tokens(self, block_identifier: int) -> list[tuple[str, str]]:
+    def get_all_reservs_tokens(
+        self, block_identifier: int | str
+    ) -> list[tuple[str, str]]:
         """
         Function to get all the reserve tokens
         """
@@ -37,7 +40,9 @@ class AaveV2:
         caller = FunctionCaller(POOL_DATA_PROVIDER_V2_ADDRESS, self.w3)
         return caller.call_function("getAllReservesTokens", block_identifier)
 
-    def get_reserve_tokens_addresses(self, block_identifier, asset) -> list[str]:
+    def get_reserve_tokens_addresses(
+        self, block_identifier: int | str, asset: str
+    ) -> list[str]:
         """
         Function to get all the reserve tokens
         """
@@ -47,7 +52,7 @@ class AaveV2:
             "getReserveTokensAddresses", block_identifier, [asset]
         )
 
-    def get_token_data(self, block_identifier: int) -> list[dict[str, str]]:
+    def get_token_data(self, block_identifier: int | str) -> list[dict[str, str]]:
         """
         Function to get all reserve data
         """
@@ -73,7 +78,7 @@ class AaveV2:
         return token_data
 
     def get_user_debt_data(
-        self, user_address: str, debt_token_address, block_identifier: int
+        self, user_address: str, debt_token_address, block_identifier: int | str
     ) -> list[tuple[str, str, str, str, str, str]]:
         """
         Function to get the user debt data
@@ -85,7 +90,7 @@ class AaveV2:
         )
 
     def get_user_reserve_data(
-        self, user_addres: str, reserve_address: str, block_identifier: int
+        self, user_addres: str, reserve_address: str, block_identifier: int | str
     ) -> list[tuple[str, str, str, str, str, str]]:
         """
         Function to get the user reserve data
@@ -96,7 +101,9 @@ class AaveV2:
             "getUserReserveData", block_identifier, [reserve_address, user_addres]
         )
 
-    def get_user_account_data(self, user_address: str, block_identifier: int) -> Any:
+    def get_user_account_data(
+        self, user_address: str, block_identifier: int | str
+    ) -> Any:
         """
         Function to get the user account data
         """
@@ -106,7 +113,9 @@ class AaveV2:
             "getUserAccountData", block_identifier, [user_address]
         )
 
-    def get_user_configuration(self, user_address: str, block_identifier: int) -> Any:
+    def get_user_configuration(
+        self, user_address: str, block_identifier: int | str
+    ) -> Any:
         """
         Function to get the user configuration
         """
@@ -115,6 +124,27 @@ class AaveV2:
         return caller.call_function(
             "getUserConfiguration", block_identifier, [user_address]
         )
+
+    def token_breakdown(self, block_identifier: int | str) -> dict:
+        """
+        Function to get the token breakdown
+        """
+
+        token_breakdown_dict = {"receipt_token": {}, "staked_token": {}}
+
+        for reserve in self.get_reserve_list(block_identifier):
+            (
+                atoken_address,
+                _,
+                _,
+            ) = self.get_reserve_tokens_addresses(block_identifier, reserve)
+
+            atoken_amount = total_supply_normalized(atoken_address, block_identifier)
+
+            token_breakdown_dict["staked_token"][atoken_address] = atoken_amount
+            token_breakdown_dict["receipt_token"][atoken_address] = atoken_amount
+
+        return token_breakdown_dict
 
 
 # class AaveV3:
@@ -135,20 +165,6 @@ class AaveV2:
 
 
 if __name__ == "__main__":
-    AaveV2 = AaveV2(w3)
-    # print(
-    #     AaveV2.get_user_debt_data(
-    #         "0xBD723fc4f1d737dCFc48a07FE7336766d34CAD5f",
-    #         "0x6C3c78838c761c6Ac7bE9F59fe808ea2A6E4379d",
-    #         11367824,
-    #     )
-    # )
-
-    print(
-        AaveV2.get_user_reserve_data(
-            "0x4Fabb145d64652a948d72533023f6E7A623C7C53",
-            "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-            11367824,
-        )
-    )
+    ptc = AaveV2(w3)
+    print(ptc.token_breakdown("latest"))
     pass
