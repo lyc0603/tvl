@@ -49,14 +49,13 @@ class Convex:
 
         token_breakdown_dict = {"receipt_token": {}, "staked_token": {}}
 
-        # governance token
-        for voter_proxy_vecrv_address, vecrv_address in GOV_TOKEN_DICT.items():
-            token_breakdown_dict["staked_token"][voter_proxy_vecrv_address] = {
-                vecrv_address: token_balance_normalized(
-                    vecrv_address, voter_proxy_vecrv_address, block_identifier
-                )
-            }
-        print(token_breakdown_dict)
+        # # governance token
+        # for voter_proxy_vecrv_address, vecrv_address in GOV_TOKEN_DICT.items():
+        #     token_breakdown_dict["staked_token"][voter_proxy_vecrv_address] = {
+        #         vecrv_address: token_balance_normalized(
+        #             vecrv_address, voter_proxy_vecrv_address, block_identifier
+        #         )
+        #     }
         # liquidity pool
         for pool_idx in tqdm(range(self.pool_length(block_identifier))):
             stake_token_address, receipt_token_address, gauge_address, _, _, _ = (

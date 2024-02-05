@@ -24,3 +24,7 @@ def date_close_to_block(date: str):
     """
 
     return date_to_block((pd.Timestamp(date) + pd.Timedelta("1D")).strftime("%Y-%m-%d"))
+
+
+if __name__ == "__main__":
+    print(date_close_to_block("2021-12-26"))

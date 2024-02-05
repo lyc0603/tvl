@@ -21,13 +21,22 @@ class FunctionCaller:
         self.contract_address = contract_address
         self.w3 = w3
 
-    def _load_abi(self, erc20: bool = False):
+    def _load_abi(
+        self, erc20: bool = False, uni: bool = False, abi_temp: Optional[str] = None
+    ):
         """
         Function to load the abi of the smart contract
         """
-
+        if abi_temp:
+            with open(DATA_PATH / "abi" / abi_temp, "r", encoding="utf-8") as f:
+                abi = json.load(f)
+            return abi
         if erc20:
-            with open(DATA_PATH / "abi" / f"erc20.json", "r", encoding="utf-8") as f:
+            with open(DATA_PATH / "abi" / "erc20.json", "r", encoding="utf-8") as f:
+                abi = json.load(f)
+            return abi
+        elif uni:
+            with open(DATA_PATH / "abi" / "uni.json", "r", encoding="utf-8") as f:
                 abi = json.load(f)
             return abi
         else:
@@ -39,11 +48,13 @@ class FunctionCaller:
                 abi = json.load(f)
         return abi
 
-    def _get_contract(self, erc20: bool = False):
+    def _get_contract(
+        self, erc20: bool = False, uni: bool = False, abi_temp: Optional[str] = None
+    ):
         """
         Function to get the contract object
         """
-        abi = self._load_abi(erc20=erc20)
+        abi = self._load_abi(erc20=erc20, uni=uni, abi_temp=abi_temp)
         contract = self.w3.eth.contract(address=self.contract_address, abi=abi)
         return contract
 
@@ -54,11 +65,13 @@ class FunctionCaller:
         block_identifier: int | str,
         params: Optional[Any] = None,
         erc20: bool = False,
+        uni: bool = False,
+        abi_temp: Optional[str] = None,
     ):
         """
         Function to call a function from the smart contract
         """
-        contract = self._get_contract(erc20=erc20)
+        contract = self._get_contract(erc20=erc20, uni=uni, abi_temp=abi_temp)
         function = getattr(contract.functions, function_name)
 
         return (

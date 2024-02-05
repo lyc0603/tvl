@@ -18,15 +18,16 @@ class MakerDAO:
     Class to fetch MakerDAO data
     """
 
-    def __init__(self):
+    def __init__(self, w3):
         self.vaults = {}
+        self.w3 = w3
 
     def cdpi(self, block_identifier: int | str = "latest") -> int:
         """
         Method to count the number of vaults
         """
 
-        caller = FunctionCaller(CDP_MANAGER_ADDRESS)
+        caller = FunctionCaller(CDP_MANAGER_ADDRESS, self.w3)
         return caller.call_function("cdpi", block_identifier)
 
     def ilks(self, ilk_id: int, block_identifier: int | str = "latest") -> ByteString:
@@ -34,7 +35,7 @@ class MakerDAO:
         Method to get the ilk info
         """
 
-        caller = FunctionCaller(CDP_MANAGER_ADDRESS)
+        caller = FunctionCaller(CDP_MANAGER_ADDRESS, self.w3)
         return caller.call_function("ilks", block_identifier, [ilk_id])
 
     def urns(self, urn_id: int, block_identifier: int | str = "latest") -> float:
@@ -42,7 +43,7 @@ class MakerDAO:
         Method to get the urn address
         """
 
-        caller = FunctionCaller(CDP_MANAGER_ADDRESS)
+        caller = FunctionCaller(CDP_MANAGER_ADDRESS, self.w3)
         return caller.call_function("urns", block_identifier, [urn_id])
 
     def urns_data(
@@ -55,7 +56,7 @@ class MakerDAO:
         Method to get the urn data
         """
 
-        caller = FunctionCaller(VAT_ADDRESS)
+        caller = FunctionCaller(VAT_ADDRESS, self.w3)
         return caller.call_function("urns", block_identifier, [ilk_id, urn_address])
 
     def list(self, block_identifier: int | str = "latest") -> list:
@@ -63,7 +64,7 @@ class MakerDAO:
         Method to get all lists
         """
 
-        caller = FunctionCaller(ILK_REGISTRY_ADDRESS)
+        caller = FunctionCaller(ILK_REGISTRY_ADDRESS, self.w3)
         return caller.call_function("list", block_identifier)
 
     def info(self, ilk: ByteString, block_identifier: int | str = "latest") -> tuple:
@@ -71,7 +72,7 @@ class MakerDAO:
         Method to get the info
         """
 
-        caller = FunctionCaller(ILK_REGISTRY_ADDRESS)
+        caller = FunctionCaller(ILK_REGISTRY_ADDRESS, self.w3)
         return caller.call_function("info", block_identifier, [ilk])
 
     def ilks_info(
@@ -81,7 +82,7 @@ class MakerDAO:
         Method to get the ilk info
         """
 
-        caller = FunctionCaller(VAT_ADDRESS)
+        caller = FunctionCaller(VAT_ADDRESS, self.w3)
         return caller.call_function("ilks", block_identifier, [ilk])
 
     def ilk_data(
@@ -91,7 +92,7 @@ class MakerDAO:
         Method to get the ilk info
         """
 
-        caller = FunctionCaller(ILK_REGISTRY_ADDRESS)
+        caller = FunctionCaller(ILK_REGISTRY_ADDRESS, self.w3)
         return caller.call_function("ilkData", block_identifier, [ilk])
 
     def token_breakdown(self, block_identifier: int | str = "latest"):

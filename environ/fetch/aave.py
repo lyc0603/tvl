@@ -140,9 +140,10 @@ class AaveV2:
             ) = self.get_reserve_tokens_addresses(block_identifier, reserve)
 
             atoken_amount = total_supply_normalized(atoken_address, block_identifier)
-
-            token_breakdown_dict["staked_token"][atoken_address] = atoken_amount
             token_breakdown_dict["receipt_token"][atoken_address] = atoken_amount
+            token_breakdown_dict["staked_token"][atoken_address] = {
+                reserve: atoken_amount
+            }
 
         return token_breakdown_dict
 
