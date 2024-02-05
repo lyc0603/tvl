@@ -17,7 +17,9 @@ for event in ["max_tvl"]:
         token_breakdown_agg = json.load(f)
 
     with open(
-        f"{PROCESSED_DATA_PATH}/network/node_edge_{event}.json", "w", encoding="utf-8"
+        f"{PROCESSED_DATA_PATH}/network/node_edge_quantity_{event}.json",
+        "w",
+        encoding="utf-8",
     ) as f:
         for receipt_protocol, receipt_token_dict in token_breakdown_agg[
             "receipt_token"

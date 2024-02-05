@@ -94,7 +94,7 @@ class Curve:
 
         caller = FunctionCaller(pool_address, self.w3)
         return caller.call_function(
-            "token", block_identifier, abi_temp="curve_v2_factory"
+            "token", block_identifier, abi_temp="curve_v2_factory.json"
         )
 
     def token_breakdown_address(
@@ -164,11 +164,20 @@ class Curve:
         """
         token_breakdown_dict = {"receipt_token": {}, "staked_token": {}}
 
-        if block_identifier < V1_REGISTRY_DEPLOY_BLOCK:
+        if (
+            block_identifier >= V1_REGISTRY_DEPLOY_BLOCK
+            and block_identifier < V1_REGISTRY_LATEST_DEPLOY_BLOCK
+        ):
             pool_address_list = [V1_REGISTRY_ADDRESS]
-        elif block_identifier < V1_REGISTRY_LATEST_DEPLOY_BLOCK:
+        elif (
+            block_identifier >= V1_REGISTRY_LATEST_DEPLOY_BLOCK
+            and block_identifier < V2_FACTORY_DEPLOY_BLOCK
+        ):
             pool_address_list = [V1_REGISTRY_ADDRESS, V1_REGISTRY_LATEST_ADDRESS]
-        elif block_identifier < V2_FACTORY_DEPLOY_BLOCK:
+        elif (
+            block_identifier >= V2_FACTORY_DEPLOY_BLOCK
+            and block_identifier < META_REGISTRY_DEPLOY_BLOCK
+        ):
             pool_address_list = [
                 V1_REGISTRY_ADDRESS,
                 V1_REGISTRY_LATEST_ADDRESS,

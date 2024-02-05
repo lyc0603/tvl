@@ -11,24 +11,18 @@ from environ.fetch.uniswap import UniswapV2
 from environ.fetch.w3 import w3
 
 ptc_list = [
-    # AaveV2(w3),
+    AaveV2(w3),
     Curve(w3),
-    # Lido(w3),
-    # MakerDAO(w3),
-    # UniswapV2(w3),
-    # Convex(w3),
+    Lido(w3),
+    MakerDAO(w3),
+    UniswapV2(w3),
+    Convex(w3),
 ]
 
 event_dict = {
     "max_tvl": {
         "date": "2021-12-26",
-        "ptc": [
-            AaveV2(w3),
-            Lido(w3),
-            MakerDAO(w3),
-            UniswapV2(w3),
-            Convex(w3),
-        ],
+        "ptc": ptc_list,
     },
     "luna_collapse": {"date": "2022-05-09", "ptc": ptc_list},
     "ftx_collapse": {"date": "2022-11-08", "ptc": ptc_list},
