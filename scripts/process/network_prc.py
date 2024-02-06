@@ -34,23 +34,23 @@ with open(
                             date_close_to_timestamp(SAMPLE_DATA_DICT[event]),
                         )
                     except:  # pylint: disable=bare-except
-                        # try:
-                        token_price = defillama.get_price_with_derivative(
-                            line["token_address"],
-                            event,
-                            date_close_to_timestamp(SAMPLE_DATA_DICT[event]),
-                            date_close_to_block(SAMPLE_DATA_DICT[event]),
-                        )
-                        # except:  # pylint: disable=bare-except
-                        #     token_price = defillama.get_lp_price(
-                        #         line["token_address"],
-                        #         date_close_to_timestamp(SAMPLE_DATA_DICT[event]),
-                        #         event,
-                        #     )
+                        try:
+                            token_price = defillama.get_price_with_derivative(
+                                line["token_address"],
+                                event,
+                                date_close_to_timestamp(SAMPLE_DATA_DICT[event]),
+                                date_close_to_block(SAMPLE_DATA_DICT[event]),
+                            )
+                        except:  # pylint: disable=bare-except
+                            token_price = defillama.get_lp_price(
+                                line["token_address"],
+                                date_close_to_timestamp(SAMPLE_DATA_DICT[event]),
+                                event,
+                            )
 
                     line["value"] = token_price * line["value"]
 
-                json.dump(line, f2, indent=4)
+                json.dump(line, f2)
                 f2.write("\n")
             except Exception as e:
-                print(line["token_address"])
+                print(line["token_address"], e)

@@ -6,7 +6,7 @@ import json
 
 import requests
 
-from environ.constants import PROCESSED_DATA_PATH, SAMPLE_DATA_DICT
+from environ.constants import PROCESSED_DATA_PATH
 from environ.fetch.w3 import total_supply_normalized
 from environ.fetch.block import date_close_to_block
 
@@ -102,7 +102,6 @@ class DeFiLlama:
             + f"/ethereum:{token_address}?searchWidth=4h",
             timeout=60,
         )
-        print(response.text)
         return response.json()["coins"][f"ethereum:{token_address}"]["price"]
 
     def get_price_with_derivative(
