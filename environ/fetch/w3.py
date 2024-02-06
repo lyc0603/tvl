@@ -55,4 +55,4 @@ def total_supply_normalized(token_address: str, block_identifier: int | str) -> 
 
 
 if __name__ == "__main__":
-    print(token_decimal("0x028171bCA77440897B824Ca71D1c56caC55b68A3", "latest"))
+    print(token_decimal("0x3Ed3B47Dd13EC9a98b44e6204A523E766B225811", "latest"))

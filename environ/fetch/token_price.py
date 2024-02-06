@@ -191,20 +191,21 @@ if __name__ == "__main__":
     from environ.fetch.block import date_close_to_timestamp, date_close_to_block
 
     defillama = DeFiLlama()
-    token_address = "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+    token_address = "0x3D229E1B4faab62F621eF2F6A610961f7BD7b23B"
     event = "max_tvl"
     timestamp = date_close_to_timestamp("2021-12-26")
     block = date_close_to_block("2021-12-26")
 
+    # print(defillama.get_price(token_address, timestamp))
     # print(defillama.get_price_with_derivative(token_address, event, timestamp, block))
 
-    # print(
-    #     defillama.get_lp_price(
-    #         "0x17eE04ec364577937855D2e9a7adD8d2a957E4Fa",
-    #         timestamp,
-    #         event,
-    #     )
-    # )
+    print(
+        defillama.get_lp_price(
+            "0x17eE04ec364577937855D2e9a7adD8d2a957E4Fa",
+            timestamp,
+            event,
+        )
+    )
 
     # print(defillama.get_price("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", timestamp))
 

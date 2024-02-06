@@ -4,8 +4,9 @@ Curve Class
 
 from tqdm import tqdm
 
+from environ.constants import ETH_ADDRESS
 from environ.fetch.function_caller import FunctionCaller
-from environ.fetch.w3 import total_supply_normalized
+from environ.fetch.w3 import token_decimal, total_supply_normalized
 from scripts.w3 import w3
 
 META_REGISTRY_ADDRESS = "0xF98B45FA17DE75FB1aD0e7aFD971b0ca00e379fC"
@@ -138,9 +139,15 @@ class Curve:
                 )
                 if _ != "0x0000000000000000000000000000000000000000"
             ]
-            stake_token_decimal_list = self.get_decimals(
-                registry_address, pool_address, block_identifier
-            )[0 : len(stake_token_address_list)]
+
+            stake_token_decimal_list = []
+            for stake_token_address in stake_token_address_list:
+                if stake_token_address == ETH_ADDRESS:
+                    stake_token_decimal_list.append(18)
+                else:
+                    stake_token_decimal_list.append(
+                        token_decimal(stake_token_address, block_identifier)
+                    )
 
             for stake_token_idx, stake_token_address in enumerate(
                 stake_token_address_list
@@ -199,4 +206,28 @@ class Curve:
 if __name__ == "__main__":
     from pprint import pprint
 
+    from environ.constants import SAMPLE_DATA_DICT
+    from environ.fetch.block import date_close_to_block
+
     ptc = Curve(w3)
+    print(
+        ptc.get_balances(
+            V1_REGISTRY_ADDRESS,
+            "0x3D229E1B4faab62F621eF2F6A610961f7BD7b23B",
+            date_close_to_block(SAMPLE_DATA_DICT["max_tvl"]),
+        )
+    )
+    print(
+        ptc.get_decimals(
+            V1_REGISTRY_ADDRESS,
+            "0x3D229E1B4faab62F621eF2F6A610961f7BD7b23B",
+            date_close_to_block(SAMPLE_DATA_DICT["max_tvl"]),
+        )
+    )
+    print(
+        ptc.get_coins(
+            V1_REGISTRY_ADDRESS,
+            "0x3D229E1B4faab62F621eF2F6A610961f7BD7b23B",
+            date_close_to_block(SAMPLE_DATA_DICT["max_tvl"]),
+        )
+    )

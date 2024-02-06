@@ -17,3 +17,13 @@ SAMPLE_DATA_DICT = {
 
 # special address
 ETH_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
+
+# class-DeFillama mapping
+CLASS_DEFILLAMA_MAPPING = {
+    "Lido": ["lido"],
+    "AaveV2": ["aave-v2"],
+    "MakerDAO": ["makerdao", "maker-rwa"],
+    "UniswapV2": ["uniswap-v2"],
+    "Curve": ["curve-dex"],
+    "Convex": ["convex-finance"],
+}
