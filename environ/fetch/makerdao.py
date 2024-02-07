@@ -11,6 +11,7 @@ ILK_REGISTRY_ADDRESS = "0x5a464C28D19848f44199D003BeF5ecc87d090F87"
 CDP_MANAGER_ADDRESS = "0x5ef30b9986345249bc32d8928B7ee64DE9435E39"
 VAT_ADDRESS = "0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B"
 DAI_ADDRESS = "0x6B175474E89094C44Da98b954EedeAC495271d0F"
+SPOT_ADDRESS = "0x65C79fcB50Ca1594B025960e539eD7A9a6D434A3"
 
 
 class MakerDAO:
@@ -95,6 +96,14 @@ class MakerDAO:
         caller = FunctionCaller(ILK_REGISTRY_ADDRESS, self.w3)
         return caller.call_function("ilkData", block_identifier, [ilk])
 
+    def mat(self, ilk: ByteString, block_identifier: int | str = "latest") -> int:
+        """
+        Method to get the mat
+        """
+
+        caller = FunctionCaller(SPOT_ADDRESS, self.w3)
+        return caller.call_function("ilks", block_identifier, [ilk])[1] / 10**27
+
     def token_breakdown(self, block_identifier: int | str = "latest"):
         """
         Get token breakdown
@@ -134,8 +143,9 @@ if __name__ == "__main__":
     from pprint import pprint
 
     from web3 import Web3
+    from scripts.w3 import w3
 
-    makerdao = MakerDAO()
+    makerdao = MakerDAO(w3)
     # cdp_id = 14282
     # # for cdp_id in tqdm(range(makerdao.cdpi())):
     # print(Web3.to_hex(makerdao.ilks(cdp_id)))
@@ -149,7 +159,7 @@ if __name__ == "__main__":
     #         makerdao.urns(cdp_id),
     #     )
     # )
-    # print(makerdao.list("latest"))
-    # print(makerdao.info(makerdao.list("latest")[6]))
+    print(makerdao.list("latest"))
+    print(makerdao.info(makerdao.list("latest")[6]))
     # print(makerdao.ilks_info(makerdao.list("latest")[6]))
-    pprint(makerdao.token_breakdown("latest"))
+    # pprint(makerdao.token_breakdown("latest"))

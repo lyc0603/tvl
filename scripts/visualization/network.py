@@ -10,7 +10,7 @@ import numpy as np
 from scripts.process.network_data_visualization import G
 
 NODE_SIZE_SCALER = 1000000
-EDGE_WIDTHS_LINEAR_SCALER = 100000000000
+EDGE_WIDTHS_LINEAR_SCALER = 500000000
 EDGE_WIDTHS_NONLINEAR_SCALER = 1
 
 

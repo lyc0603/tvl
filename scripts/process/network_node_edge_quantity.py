@@ -6,9 +6,9 @@ import json
 
 from tqdm import tqdm
 
-from environ.constants import PROCESSED_DATA_PATH
+from environ.constants import PROCESSED_DATA_PATH, SAMPLE_DATA_DICT
 
-for event in ["max_tvl"]:
+for event, date in SAMPLE_DATA_DICT.items():
     with open(
         f"{PROCESSED_DATA_PATH}/network/token_breakdown_{event}.json",
         "r",

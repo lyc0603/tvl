@@ -54,5 +54,13 @@ def total_supply_normalized(token_address: str, block_identifier: int | str) -> 
     return supply / (10**decimal)
 
 
+def token_symbol(token_address: str, block_identifier: int | str) -> str:
+    """
+    Function to get the symbol of a token
+    """
+    caller = FunctionCaller(token_address, w3)
+    return caller.call_function("symbol", block_identifier, erc20=True)
+
+
 if __name__ == "__main__":
     print(token_decimal("0x3Ed3B47Dd13EC9a98b44e6204A523E766B225811", "latest"))

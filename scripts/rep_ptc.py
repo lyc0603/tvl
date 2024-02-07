@@ -10,14 +10,19 @@ from environ.fetch.makerdao import MakerDAO
 from environ.fetch.uniswap import UniswapV2
 from environ.fetch.w3 import w3
 
-ptc_list = [
-    AaveV2(w3),
+non_plf_list = [
     Curve(w3),
     Lido(w3),
-    MakerDAO(w3),
     UniswapV2(w3),
     Convex(w3),
 ]
+
+plf_list = [
+    AaveV2(w3),
+    MakerDAO(w3),
+]
+
+ptc_list = non_plf_list + plf_list
 
 event_dict = {
     "max_tvl": {

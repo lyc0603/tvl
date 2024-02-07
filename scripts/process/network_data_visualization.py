@@ -15,7 +15,7 @@ from environ.constants import (
 from environ.fetch.block import date_close_to_timestamp
 from scripts.rep_ptc import ptc_list
 
-event = "max_tvl"
+event = "ftx_collapse"
 
 # initialize the graph
 G = nx.DiGraph()

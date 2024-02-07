@@ -12,45 +12,44 @@ from environ.fetch.token_price import DeFiLlama
 
 defillama = DeFiLlama()
 
-event = "max_tvl"
-
-with open(
-    f"{PROCESSED_DATA_PATH}/network/node_edge_quantity_max_tvl.json",
-    "r",
-    encoding="utf-8",
-) as f:
+for event, date in SAMPLE_DATA_DICT.items():
     with open(
-        f"{PROCESSED_DATA_PATH}/network/node_edge_amount_max_tvl.json",
-        "w",
+        f"{PROCESSED_DATA_PATH}/network/node_edge_quantity_{event}.json",
+        "r",
         encoding="utf-8",
-    ) as f2:
-        for line in tqdm(f):
-            line = json.loads(line)
-            try:
-                if line["value"] != 0:
-                    try:
-                        token_price = defillama.get_price(
-                            line["token_address"],
-                            date_close_to_timestamp(SAMPLE_DATA_DICT[event]),
-                        )
-                    except:  # pylint: disable=bare-except
+    ) as f:
+        with open(
+            f"{PROCESSED_DATA_PATH}/network/node_edge_amount_{event}.json",
+            "w",
+            encoding="utf-8",
+        ) as f2:
+            for line in tqdm(f):
+                line = json.loads(line)
+                try:
+                    if line["value"] != 0:
                         try:
-                            token_price = defillama.get_price_with_derivative(
+                            token_price = defillama.get_price(
                                 line["token_address"],
-                                event,
-                                date_close_to_timestamp(SAMPLE_DATA_DICT[event]),
-                                date_close_to_block(SAMPLE_DATA_DICT[event]),
+                                date_close_to_timestamp(date),
                             )
                         except:  # pylint: disable=bare-except
-                            token_price = defillama.get_lp_price(
-                                line["token_address"],
-                                date_close_to_timestamp(SAMPLE_DATA_DICT[event]),
-                                event,
-                            )
+                            try:
+                                token_price = defillama.get_price_with_derivative(
+                                    line["token_address"],
+                                    event,
+                                    date_close_to_timestamp(date),
+                                    date_close_to_block(date),
+                                )
+                            except:  # pylint: disable=bare-except
+                                token_price = defillama.get_lp_price(
+                                    line["token_address"],
+                                    date_close_to_timestamp(date),
+                                    event,
+                                )
 
-                    line["value"] = token_price * line["value"]
+                        line["value"] = token_price * line["value"]
 
-                json.dump(line, f2)
-                f2.write("\n")
-            except Exception as e:
-                print(line["token_address"], e)
+                    json.dump(line, f2)
+                    f2.write("\n")
+                except Exception as e:
+                    print(line["token_address"], e)

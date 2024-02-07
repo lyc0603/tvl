@@ -10,6 +10,7 @@ from scripts.w3 import w3
 
 POOL_V2_ADDRESS = "0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9"
 POOL_DATA_PROVIDER_V2_ADDRESS = "0x057835Ad21a177dbdd3090bB1CAE03EaCF78Fc6d"
+PRICE_ORACLE_V2_ADDRESS = "0xA50ba011c48153De246E5192C8f9258A2ba79Ca9"
 
 POOL_V3_ADDRESS = "0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2"
 
@@ -125,6 +126,38 @@ class AaveV2:
             "getUserConfiguration", block_identifier, [user_address]
         )
 
+    def get_reserve_configuration_data(
+        self, reserve_address: str, block_identifier: int | str
+    ) -> Any:
+        """
+        Function to get the reserve configuration data
+        """
+
+        caller = FunctionCaller(POOL_DATA_PROVIDER_V2_ADDRESS, self.w3)
+        return caller.call_function(
+            "getReserveConfigurationData", block_identifier, [reserve_address]
+        )
+
+    def get_asset_price(self, asset: str, block_identifier: int | str) -> Any:
+        """
+        Function to get the asset price
+        """
+
+        caller = FunctionCaller(PRICE_ORACLE_V2_ADDRESS, self.w3)
+        return caller.call_function("getAssetPrice", block_identifier, [asset])
+
+    def underlying_asset_address(
+        self, atoken_address: str, block_identifier: int | str
+    ) -> Any:
+        """
+        Function to get the underlying asset address
+        """
+
+        caller = FunctionCaller(atoken_address, self.w3)
+        return caller.call_function(
+            "UNDERLYING_ASSET_ADDRESS", block_identifier, abi_temp="atoken.json"
+        )
+
     def token_breakdown(self, block_identifier: int | str) -> dict:
         """
         Function to get the token breakdown
@@ -167,5 +200,10 @@ class AaveV2:
 
 if __name__ == "__main__":
     ptc = AaveV2(w3)
-    print(ptc.token_breakdown("latest"))
+    # print(ptc.token_breakdown("latest"))
+    print(
+        ptc.underlying_asset_address(
+            "0x030bA81f1c18d280636F32af80b9AAd02Cf0854e", "latest"
+        )
+    )
     pass
