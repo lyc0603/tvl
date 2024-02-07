@@ -145,6 +145,47 @@ class DeFiLlama:
                             token_address, block
                         )
 
+    def get_lp_derivative_price(
+        self, token_address: str, event: str, timestamp: int, block: int
+    ) -> float | None:
+        """
+        Function to get the price of the derivative
+        """
+        # print(f"calculate price for {token_address}")
+        try:
+            return self.get_price(token_address, timestamp)
+        except:  # pylint: disable=bare-except
+            with open(
+                f"{PROCESSED_DATA_PATH}/token_breakdown/token_breakdown_{event}.json",
+                "r",
+                encoding="utf-8",
+            ) as f:
+                derivative_dict = json.load(f)
+                for derivative_token, staked_token_dict in derivative_dict[
+                    "staked_token"
+                ]["UniswapV2"].items():
+                    if token_address == derivative_token:
+                        underlying_token_value = 0
+                        for (
+                            staked_token,
+                            staked_token_quantity,
+                        ) in staked_token_dict.items():
+                            try:
+                                underlying_token_price = self.get_price(
+                                    staked_token, timestamp
+                                )
+                            except:
+                                underlying_token_price = self.get_price_with_derivative(
+                                    staked_token, event, timestamp, block
+                                )
+                            underlying_token_value += (
+                                underlying_token_price * staked_token_quantity
+                            )
+
+                        return underlying_token_value / total_supply_normalized(
+                            token_address, block
+                        )
+
     def get_lp_price(self, lp_token_address: str, timestamp: int, event: str) -> float:
         """
         Function to get the price of the lp token
