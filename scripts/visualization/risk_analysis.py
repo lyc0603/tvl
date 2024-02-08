@@ -81,7 +81,7 @@ for event, date in SAMPLE_DATA_DICT.items():
         axes.yaxis.label.set_size(18)
 
         # set the x axis range
-        axes.xaxis.set_label_coords(-0.5, -0.08)
+        axes.xaxis.set_label_coords(-0.45, -0.08)
 
         # increase the font size
         plt.xticks(fontsize=16)
