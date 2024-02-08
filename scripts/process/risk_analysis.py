@@ -146,6 +146,7 @@ for params, params_grid in params_dict.items():
                                 > debt_value
                                 * params_grid["$\\psi_{1}^{AAVE}$"][params_idx]
                             ):
+
                                 plf_tvl_drop += (
                                     collateral_value_tvl
                                     * params_grid["$\\delta^{AAVE}$"][params_idx]
@@ -167,12 +168,9 @@ for params, params_grid in params_dict.items():
                                 plf_tvl_drop += linear_tvl_drop
                                 plf_tvr_drop += linear_tvr_drop
 
-                        if plf == "makerdao":
+                        else:
                             liq_num_mkr += 1
-                            if (
-                                collat_borrowing_power < debt_value
-                                and collat_borrowing_power > debt_value
-                            ):
+                            if collat_borrowing_power < debt_value:
                                 plf_tvl_drop += (
                                     collateral_value_tvl
                                     * params_grid["$\\delta^{MKR}$"][params_idx]
