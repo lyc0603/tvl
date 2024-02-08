@@ -17,7 +17,7 @@ EDGE_WIDTHS_NONLINEAR_SCALER = 1
 for event, date in SAMPLE_DATA_DICT.items():
     # Plot the network
     pos = nx.circular_layout(GRAPH_DICT[event])
-    plt.figure(figsize=(16, 12))
+    plt.figure(figsize=(10, 6))
 
     node_sizes = nx.get_node_attributes(GRAPH_DICT[event], "tvl")
     edge_widths = nx.get_edge_attributes(GRAPH_DICT[event], "weight")
@@ -39,7 +39,7 @@ for event, date in SAMPLE_DATA_DICT.items():
     )
 
     nx.draw_networkx_labels(
-        GRAPH_DICT[event], pos, font_size=12, verticalalignment="bottom"
+        GRAPH_DICT[event], pos, font_size=15, verticalalignment="bottom"
     )
     plt.tight_layout()
     plt.show()
