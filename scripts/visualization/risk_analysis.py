@@ -17,7 +17,7 @@ PARAMS_NAMEING_MAPPING = {
 for event, date in SAMPLE_DATA_DICT.items():
     for params, params_grid in params_dict.items():
         fig, axes = plt.subplots(
-            figsize=(5, 6),
+            figsize=(4, 6),
         )
 
         ls_list = []
@@ -81,7 +81,7 @@ for event, date in SAMPLE_DATA_DICT.items():
         axes.yaxis.label.set_size(18)
 
         # set the x axis range
-        axes.xaxis.set_label_coords(-0.1, -0.08)
+        axes.xaxis.set_label_coords(-0.5, -0.08)
 
         # increase the font size
         plt.xticks(fontsize=16)
