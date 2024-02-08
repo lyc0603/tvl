@@ -22,22 +22,6 @@ for event, date in SAMPLE_DATA_DICT.items():
     node_sizes = nx.get_node_attributes(GRAPH_DICT[event], "tvl")
     edge_widths = nx.get_edge_attributes(GRAPH_DICT[event], "weight")
 
-    # plt.title(
-    #     label="Directional Trading Volume among Top 50 Pools in Uniswap "
-    #     + " at "
-    #     + date_str,
-    #     fontdict={"fontsize": 12},
-    #     loc="center",
-    # )
-
-    # nx.draw(
-    #     G,
-    #     node_size=[i / NODE_SIZE_SCALER for i in list(node_sizes.values())],
-    #     pos=pos,
-    #     with_labels=True,
-    #     connectionstyle="arc3,rad=0.3",
-    # )
-
     nx.draw_networkx_nodes(
         GRAPH_DICT[event],
         pos,
@@ -57,7 +41,7 @@ for event, date in SAMPLE_DATA_DICT.items():
     nx.draw_networkx_labels(
         GRAPH_DICT[event], pos, font_size=12, verticalalignment="bottom"
     )
-
+    plt.tight_layout()
     plt.show()
     plt.savefig(
         f"{FIGURE_PATH}/network_{event}.pdf",
