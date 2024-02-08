@@ -238,8 +238,8 @@ if __name__ == "__main__":
     timestamp = date_close_to_timestamp("2021-12-26")
     block = date_close_to_block("2021-12-26")
 
-    print(defillama.get_price(token_address, timestamp))
-    # print(defillama.get_price_with_derivative(token_address, event, timestamp, block))
+    # print(defillama.get_price(token_address, timestamp))
+    print(defillama.get_price_with_derivative(token_address, event, timestamp, block))
 
     # print(
     #     defillama.get_lp_price(

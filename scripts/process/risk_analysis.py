@@ -31,7 +31,7 @@ for params, params_grid in params_dict.items():
             PLAIN_TOKEN_LIST = [ETH_ADDRESS, ETH_ADDRESS_LOWER, WETH_ADDRESS]
 
             with open(
-                PROCESSED_DATA_PATH / "risk" / "plf_eth_acct.json",
+                PROCESSED_DATA_PATH / "risk" / f"plf_eth_acct_{event}.json",
                 "r",
                 encoding="utf-8",
             ) as f:
