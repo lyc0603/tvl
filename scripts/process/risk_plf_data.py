@@ -6,19 +6,11 @@ import json
 import pandas as pd
 from environ.constants import (
     SAMPLE_DATA_DICT,
-    ETH_ADDRESS,
-    ETH_ADDRESS_LOWER,
-    WETH_ADDRESS,
     DAI_ADDRESS,
     PROCESSED_DATA_PATH,
 )
-from environ.process.risk_analysis import (
-    get_related_token,
-    get_related_token_ptc,
-    convert_to_plain_quantity,
-)
-from scripts.rep_ptc import non_plf_list
 from scripts.process.risk_token_relationship import eth_related_token_set
+from scripts.fetch.plf_eth_related_price import eth_related_price_dict
 
 event = "max_tvl"
 date = SAMPLE_DATA_DICT[event]
@@ -26,6 +18,8 @@ date = SAMPLE_DATA_DICT[event]
 plf_dict = {}
 
 store_list = []
+
+reserve_set = set()
 
 # prcoeess aave v2 data
 with open(
@@ -42,6 +36,7 @@ with open(
         for reserve in line["data"]:
             if reserve["reserve_address"] in eth_related_token_set:
                 eth_related = True
+            reserve_set.add(reserve["reserve_address"])
 
         if eth_related:
 
@@ -90,24 +85,51 @@ plf_dict["aave"] = store_list
 store_list = []
 df_mkr = pd.read_csv(PROCESSED_DATA_PATH / "makerdao" / f"{event}.csv")
 
-token_set = set()
-
 for idx, row in df_mkr.iterrows():
+    reserve_set.add(row["symbol"])
+
     eth_related_acct_dict = {"collateral": [], "debt": []}
-    if row["symbol"] in eth_related_token_set and row["collateral_amount"] != 0:
+    if row["symbol"] in eth_related_token_set and float(row["collateral_amount"]) != 0:
+        collateral_value = 0
+        debt_value = 0
 
         eth_related_acct_dict["collateral"].append(
             {
                 "collateral_address": row["symbol"],
-                "collateral_value": row["collateral_amount"],
-                "lt": 1 / row["liq_ratio"],
+                "collateral_value": float(row["collateral_amount"])
+                * eth_related_price_dict[event][row["symbol"]],
+                "lt": 1 / float(row["liq_ratio"]),
             }
         )
 
         eth_related_acct_dict["debt"].append(
             {
                 "debt_address": DAI_ADDRESS,
-                "debt_value": row["debt_amount"],
+                "debt_value": float(row["debt_amount"])
+                * eth_related_price_dict[event][DAI_ADDRESS],
             }
         )
-        token_set.add(row["symbol"])
+
+        collateral_value += (
+            float(row["collateral_amount"])
+            * eth_related_price_dict[event][row["symbol"]]
+            * (1 / float(row["liq_ratio"]))
+        )
+
+        debt_value += (
+            float(row["debt_amount"]) * eth_related_price_dict[event][DAI_ADDRESS]
+        )
+
+        if collateral_value >= debt_value:
+            store_list.append(eth_related_acct_dict)
+        else:
+            continue
+
+plf_dict["makerdao"] = store_list
+
+with open(
+    PROCESSED_DATA_PATH / "risk" / "plf_eth_acct.json",
+    "w",
+    encoding="utf-8",
+) as f:
+    json.dump(plf_dict, f, indent=4)
