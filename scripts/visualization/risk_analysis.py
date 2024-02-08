@@ -17,7 +17,7 @@ PARAMS_NAMEING_MAPPING = {
 for event, date in SAMPLE_DATA_DICT.items():
     for params, params_grid in params_dict.items():
         fig, axes = plt.subplots(
-            figsize=(4, 6),
+            figsize=(5, 6),
         )
 
         ls_list = []
