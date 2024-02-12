@@ -57,7 +57,7 @@ for event, date in SAMPLE_DATA_DICT.items():
                     x=depeg_start_pcg,
                     color=COLOR_LIST[params_idx],
                     ls="dashdot",
-                    alpha=0.2,
+                    alpha=0.5,
                 )
 
         axes.plot(
@@ -97,7 +97,7 @@ for event, date in SAMPLE_DATA_DICT.items():
 
         # increase label and tick size
         axes.xaxis.label.set_size(18)
-        axes.yaxis.label.set_size(18)
+        axes.yaxis.label.set_size(14)
 
         # set the x axis range
         axes.xaxis.set_label_coords(0, -0.08)
