@@ -24,6 +24,7 @@ for event, date in SAMPLE_DATA_DICT.items():
     plain_token_dict[event] = {}
 
     ETH_LIST = [WETH_ADDRESS, ETH_ADDRESS, ETH_ADDRESS_LOWER]
+    DAI_LIST = [DAI_ADDRESS]
 
     # get related token set
     eth_related_token_set = get_related_token(event, set(ETH_LIST))
@@ -65,7 +66,9 @@ for event, date in SAMPLE_DATA_DICT.items():
             ptc_staked = token_breakdown["staked_token"][ptc_name]
             for related_token, related_token_quantity in related_token_dict.items():
 
-                if related_token in ETH_LIST:
+                if (token == "eth" and related_token in ETH_LIST) and (
+                    token == "dai" and related_token in DAI_LIST
+                ):
                     plain_token_dict[event][token][
                         related_token
                     ] = related_token_quantity

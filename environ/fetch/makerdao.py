@@ -5,13 +5,17 @@ Script to fetch MakerDAO data
 from typing import ByteString
 
 from environ.fetch.function_caller import FunctionCaller
-from environ.fetch.w3 import token_balance_normalized
+from environ.fetch.w3 import (
+    token_balance_normalized,
+    token_decimal,
+)
 
 ILK_REGISTRY_ADDRESS = "0x5a464C28D19848f44199D003BeF5ecc87d090F87"
 CDP_MANAGER_ADDRESS = "0x5ef30b9986345249bc32d8928B7ee64DE9435E39"
 VAT_ADDRESS = "0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B"
 DAI_ADDRESS = "0x6B175474E89094C44Da98b954EedeAC495271d0F"
 SPOT_ADDRESS = "0x65C79fcB50Ca1594B025960e539eD7A9a6D434A3"
+POT_ADDRESS = "0x197E90f9FAD81970bA7976f33CbD77088E5D7cf7"
 
 
 class MakerDAO:
@@ -103,6 +107,16 @@ class MakerDAO:
 
         caller = FunctionCaller(SPOT_ADDRESS, self.w3)
         return caller.call_function("ilks", block_identifier, [ilk])[1] / 10**27
+
+    def dsr(self, block_identifier: int | str = "latest") -> int:
+        """
+        Method to get the dsr
+        """
+
+        caller = FunctionCaller(VAT_ADDRESS, self.w3)
+        return caller.call_function("dai", block_identifier, [POT_ADDRESS]) / (
+            10 ** (27 + token_decimal(DAI_ADDRESS, block_identifier))
+        )
 
     def token_breakdown(self, block_identifier: int | str = "latest"):
         """

@@ -54,14 +54,17 @@ for event, date in SAMPLE_DATA_DICT.items():
     )
 
     nx.draw_networkx_labels(
-        GRAPH_DICT[event], pos, font_size=18, verticalalignment="bottom"
+        GRAPH_DICT[event], pos, font_size=20, verticalalignment="bottom"
     )
 
     # add color bar
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(0, max(node_colors)))
     sm.set_array([])
+
+    # make the color bar tick size bigger
     cbar = plt.colorbar(sm, orientation="vertical")
-    cbar.set_label("TVL / TVR", rotation=270, labelpad=20)
+    cbar.ax.tick_params(labelsize=20)
+    cbar.set_label("TVL / TVR", rotation=270, labelpad=20, fontsize=20)
 
     plt.tight_layout()
     plt.show()

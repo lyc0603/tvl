@@ -2,29 +2,40 @@
 Script to perform risk analysis on the data
 """
 
-from scripts.process.risk_token_relationship import plain_token_dict
-from scripts.fetch.plf_eth_related_price import eth_related_price_dict
+import json
+
+from tqdm import tqdm
+
 from environ.constants import (
-    WETH_ADDRESS,
-    PROCESSED_DATA_PATH,
     ETH_ADDRESS,
     ETH_ADDRESS_LOWER,
     PLAIN_TOKEN_LIST_PLF,
+    PROCESSED_DATA_PATH,
     SAMPLE_DATA_DICT,
+    WETH_ADDRESS,
     params_dict,
 )
-import json
-from tqdm import tqdm
+from scripts.fetch.plf_eth_related_price import eth_related_price_dict
+from scripts.process.risk_token_relationship import plain_token_dict
 
 risk_dict = {}
+depeg_dict = {}
+
+with open(f"{PROCESSED_DATA_PATH}/mkr_tvl_debt.json", "r", encoding="utf-8") as f:
+    mkr_tvl_debt_dict = json.load(f)
 
 
 for params, params_grid in params_dict.items():
     risk_dict[params] = {}
+    depeg_dict[params] = {}
+
     for params_idx, target_params in enumerate(params_grid[params]):
         risk_dict[params][target_params] = {}
+        depeg_dict[params][target_params] = {}
+
         for event, date in SAMPLE_DATA_DICT.items():
             risk_dict[params][target_params][event] = {}
+            depeg_dict[params][target_params][event] = {}
 
             eth_price = eth_related_price_dict[event][WETH_ADDRESS]
 
@@ -43,6 +54,9 @@ for params, params_grid in params_dict.items():
                 "tvr_drop": [],
                 "liq_num_mkr": [],
                 "liq_num_aave": [],
+            }
+            depeg_dict[params][target_params][event] = {
+                "depeg_eth_decline_pct": [],
             }
 
             # split 0 - 1 into 100 parts
@@ -71,6 +85,10 @@ for params, params_grid in params_dict.items():
 
                 liq_num_aave = 0
                 liq_num_mkr = 0
+
+                # depeg
+                mkr_tvl_drop = 0
+                depeg_tvl_drop = 0
 
                 for plf in ["aave", "makerdao"]:
                     system_total_collat = 0
@@ -144,22 +162,22 @@ for params, params_grid in params_dict.items():
                                 collat_borrowing_power < debt_value
                                 and collat_borrowing_power
                                 > debt_value
-                                * params_grid["$\\psi_{1}^{AAVE}$"][params_idx]
+                                * params_grid["$\\psi_{1,AAVE}$"][params_idx]
                             ):
 
                                 plf_tvl_drop += (
                                     collateral_value_tvl
-                                    * params_grid["$\\delta^{AAVE}$"][params_idx]
+                                    * params_grid["$\\delta_{AAVE}$"][params_idx]
                                 )
                                 plf_tvr_drop += (
                                     collateral_value_tvr
-                                    * params_grid["$\\delta^{AAVE}$"][params_idx]
+                                    * params_grid["$\\delta_{AAVE}$"][params_idx]
                                 )
 
                             elif (
                                 collat_borrowing_power
                                 < debt_value
-                                * params_grid["$\\psi_{1}^{AAVE}$"][params_idx]
+                                * params_grid["$\\psi_{1,AAVE}$"][params_idx]
                             ):
                                 plf_tvl_drop += collateral_value_tvl
                                 plf_tvr_drop += collateral_value_tvr
@@ -173,22 +191,46 @@ for params, params_grid in params_dict.items():
                             if collat_borrowing_power < debt_value:
                                 plf_tvl_drop += (
                                     collateral_value_tvl
-                                    * params_grid["$\\delta^{MKR}$"][params_idx]
+                                    * params_grid["$\\delta_{MKR}$"][params_idx]
                                 )
                                 plf_tvr_drop += (
                                     collateral_value_tvr
-                                    * params_grid["$\\delta^{MKR}$"][params_idx]
+                                    * params_grid["$\\delta_{MKR}$"][params_idx]
+                                )
+
+                                mkr_tvl_drop += (
+                                    collateral_value_tvl
+                                    * params_grid["$\\delta_{MKR}$"][params_idx]
                                 )
 
                             else:
                                 plf_tvl_drop += linear_tvl_drop
                                 plf_tvr_drop += linear_tvr_drop
+                                mkr_tvl_drop += linear_tvl_drop
+
+                # DAI depeg
+                if (
+                    mkr_tvl_debt_dict[event]["tvl"] - mkr_tvl_drop
+                    < mkr_tvl_debt_dict[event]["debt"]
+                ):
+                    dai_price = (
+                        mkr_tvl_debt_dict[event]["debt"]
+                        / mkr_tvl_debt_dict[event]["tvl"]
+                    )
+                    depeg_dict[params][target_params][event][
+                        "depeg_eth_decline_pct"
+                    ].append(eth_decline_pct)
+
+                    depeg_tvl_drop = (
+                        sum(plain_token_dict[event]["dai"].values())
+                        + mkr_tvl_debt_dict[event]["dsr"]
+                    ) * (1 - dai_price)
 
                 risk_dict[params][target_params][event]["eth_decline_pct"].append(
                     eth_decline_pct
                 )
                 risk_dict[params][target_params][event]["tvl_drop"].append(
-                    -(non_plf_tvl_drop + plf_tvl_drop)
+                    -(non_plf_tvl_drop + plf_tvl_drop + depeg_tvl_drop)
                 )
                 risk_dict[params][target_params][event]["tvr_drop"].append(
                     -(non_plf_tvr_drop + plf_tvr_drop)
