@@ -5,7 +5,7 @@ Script to perform risk analysis on the data
 import matplotlib.pyplot as plt
 from environ.constants import SAMPLE_DATA_DICT, params_dict, FIGURE_PATH
 
-from scripts.process.risk_analysis import risk_dict, depeg_dict
+# from scripts.process.risk_analysis import risk_dict, depeg_dict
 
 COLOR_LIST = ["red", "darkblue", "green"]
 PARAMS_NAMEING_MAPPING = {
@@ -18,7 +18,7 @@ PARAMS_NAMEING_MAPPING = {
 for event, date in SAMPLE_DATA_DICT.items():
     for params, params_grid in params_dict.items():
         # figure size
-        fig, axes = plt.subplots(figsize=(5.5, 5.5))
+        fig, axes = plt.subplots(figsize=(6, 6))
 
         ls_list = []
 
@@ -73,16 +73,16 @@ for event, date in SAMPLE_DATA_DICT.items():
             ["TVL", "TVR", "DAI Depeg"],
             frameon=False,
             loc="upper right",
-            prop={"size": 16},
+            prop={"size": 18},
         )
         legend2 = plt.legend(
             [lines[i] for i in [0, 2, 4]],
             ls_list,
             frameon=False,
             loc="lower left",
-            prop={"size": 16},
+            prop={"size": 18},
             title=params,
-            title_fontsize="16",
+            title_fontsize="18",
         )
         axes.add_artist(legend1)
         axes.add_artist(legend2)
@@ -96,8 +96,8 @@ for event, date in SAMPLE_DATA_DICT.items():
         plt.ylabel(r"Change in TVL $\Delta_{TVL}$ and TVR $\Delta_{TVR}$ (USD)")
 
         # increase label and tick size
-        axes.xaxis.label.set_size(16)
-        axes.yaxis.label.set_size(14)
+        axes.xaxis.label.set_size(18)
+        axes.yaxis.label.set_size(18)
 
         # set the x axis range
         axes.xaxis.set_label_coords(0, -0.08)
