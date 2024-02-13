@@ -55,7 +55,7 @@ for event, date in SAMPLE_DATA_DICT.items():
                 print(params, target_params, event, depeg_start_pcg)
                 axes.axvline(
                     x=depeg_start_pcg,
-                    color=COLOR_LIST[params_idx],
+                    color=COLOR_LIST[params_idx] if params_idx != 2 else "black",
                     ls="dashdot",
                     alpha=0.5,
                 )
@@ -86,6 +86,7 @@ for event, date in SAMPLE_DATA_DICT.items():
         )
         axes.add_artist(legend1)
         axes.add_artist(legend2)
+
         # add the grid and increase the opacity and increase the intensity
         plt.grid(alpha=0.3)
 
