@@ -88,6 +88,7 @@ for params, params_grid in params_dict.items():
 
                 # depeg
                 mkr_tvl_drop = 0
+                mkr_debt_drop = 0
                 depeg_tvl_drop = 0
 
                 for plf in ["aave", "makerdao"]:
@@ -99,6 +100,7 @@ for params, params_grid in params_dict.items():
                         debt_value = 0
                         collateral_value_tvl = 0
                         collateral_value_tvr = 0
+                        collateral_value_after = 0
 
                         for idx, collateral in enumerate(acct["collateral"]):
                             linear_tvl_drop = 0
@@ -132,29 +134,38 @@ for params, params_grid in params_dict.items():
                                     * (1 - eth_decline_pct / 100)
                                     * acct["collateral"][idx]["lt"]
                                 )
-                                system_total_collat += acct["collateral"][idx][
+
+                                collateral_value_after += acct["collateral"][idx][
                                     "collateral_value"
                                 ] * (1 - eth_decline_pct / 100)
+
+                                # system_total_collat += acct["collateral"][idx][
+                                #     "collateral_value"
+                                # ] * (1 - eth_decline_pct / 100)
                             else:
                                 collat_borrowing_power += (
                                     acct["collateral"][idx]["collateral_value"]
                                     * acct["collateral"][idx]["lt"]
                                 )
-                                system_total_collat += acct["collateral"][idx][
+                                collateral_value_after += acct["collateral"][idx][
                                     "collateral_value"
                                 ]
+                                # system_total_collat += acct["collateral"][idx][
+                                #     "collateral_value"
+                                # ]
 
                         for idx, debt in enumerate(acct["debt"]):
                             if debt["debt_address"] == WETH_ADDRESS:
                                 debt_value += acct["debt"][idx]["debt_value"] * (
                                     1 - eth_decline_pct / 100
                                 )
-                                system_total_debt += acct["debt"][idx]["debt_value"] * (
-                                    1 - eth_decline_pct / 100
-                                )
+                                # system_total_debt += acct["debt"][idx]["debt_value"] * (
+                                #     1 - eth_decline_pct / 100
+                                # )
                             else:
                                 debt_value += acct["debt"][idx]["debt_value"]
-                                system_total_debt += acct["debt"][idx]["debt_value"]
+                                # system_total_debt += acct["debt"][idx]["debt_value"]
+
                         # liquidation
                         if plf == "aave":
                             liq_num_aave += 1
@@ -163,6 +174,7 @@ for params, params_grid in params_dict.items():
                                 and collat_borrowing_power
                                 > debt_value
                                 * params_grid["$\\psi_{1,AAVE}$"][params_idx]
+                                and collateral_value_after >= debt_value
                             ):
 
                                 plf_tvl_drop += (
@@ -178,6 +190,7 @@ for params, params_grid in params_dict.items():
                                 collat_borrowing_power
                                 < debt_value
                                 * params_grid["$\\psi_{1,AAVE}$"][params_idx]
+                                and collateral_value_after >= debt_value
                             ):
                                 plf_tvl_drop += collateral_value_tvl
                                 plf_tvr_drop += collateral_value_tvr
@@ -188,7 +201,9 @@ for params, params_grid in params_dict.items():
 
                         else:
                             liq_num_mkr += 1
-                            if collat_borrowing_power < debt_value:
+                            if (collat_borrowing_power < debt_value) and (
+                                collateral_value_after >= debt_value
+                            ):
                                 plf_tvl_drop += (
                                     collateral_value_tvl
                                     * params_grid["$\\delta_{MKR}$"][params_idx]
@@ -203,6 +218,10 @@ for params, params_grid in params_dict.items():
                                     * params_grid["$\\delta_{MKR}$"][params_idx]
                                 )
 
+                                mkr_debt_drop += (
+                                    debt_value
+                                    * params_grid["$\\delta_{MKR}$"][params_idx]
+                                )
                             else:
                                 plf_tvl_drop += linear_tvl_drop
                                 plf_tvr_drop += linear_tvr_drop
@@ -211,7 +230,7 @@ for params, params_grid in params_dict.items():
                 # DAI depeg
                 if (
                     mkr_tvl_debt_dict[event]["tvl"] - mkr_tvl_drop
-                    < mkr_tvl_debt_dict[event]["debt"]
+                    < mkr_tvl_debt_dict[event]["debt"] - mkr_debt_drop
                 ):
                     dai_price = (
                         mkr_tvl_debt_dict[event]["debt"]

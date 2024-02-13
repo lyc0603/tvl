@@ -55,7 +55,7 @@ for event, date in SAMPLE_DATA_DICT.items():
                 print(params, target_params, event, depeg_start_pcg)
                 axes.axvline(
                     x=depeg_start_pcg,
-                    color=COLOR_LIST[params_idx] if params_idx != 2 else "black",
+                    color=COLOR_LIST[params_idx],
                     ls="dashdot",
                     alpha=0.5,
                 )
