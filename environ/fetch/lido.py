@@ -7,6 +7,7 @@ from environ.fetch.function_caller import FunctionCaller
 ETH_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
 STETH_ADDRRESS = "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"
 WSTETH_ADDRESS = "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"
+STMATIC_ADDRESS = "0x9ee91F9f426fA633d227f7a9b000E28b9dfd8599"
 
 
 class Lido:
@@ -23,6 +24,15 @@ class Lido:
         """
         caller = FunctionCaller(STETH_ADDRRESS, self.w3)
         return caller.call_function("getTotalPooledEther", block_identifier) / 10 ** (
+            caller.call_function("decimals", block_identifier, erc20=True)
+        )
+
+    def get_total_pooled_matic(self, block_identifier: int):
+        """
+        Get total pooled ether
+        """
+        caller = FunctionCaller(STMATIC_ADDRESS, self.w3)
+        return caller.call_function("getTotalPooledMatic", block_identifier) / 10 ** (
             caller.call_function("decimals", block_identifier, erc20=True)
         )
 
@@ -83,4 +93,4 @@ if __name__ == "__main__":
     from scripts.w3 import w3
 
     ptc = Lido(w3)
-    pprint(ptc.token_breakdown("latest"))
+    pprint(ptc.get_total_pooled_matic("latest"))

@@ -261,3 +261,17 @@ for params, params_grid in params_dict.items():
                 risk_dict[params][target_params][event]["liq_num_aave"].append(
                     liq_num_aave
                 )
+
+with open(
+    PROCESSED_DATA_PATH / "risk" / "risk_dict.json",
+    "w",
+    encoding="utf-8",
+) as f:
+    json.dump(risk_dict, f, ensure_ascii=False, indent=4)
+
+with open(
+    PROCESSED_DATA_PATH / "risk" / "depeg_dict.json",
+    "w",
+    encoding="utf-8",
+) as f:
+    json.dump(depeg_dict, f, ensure_ascii=False, indent=4)

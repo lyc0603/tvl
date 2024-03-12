@@ -138,13 +138,40 @@ class AaveV2:
             "getReserveConfigurationData", block_identifier, [reserve_address]
         )
 
+    def get_reserve_data(
+        self, reserve_address: str, block_identifier: int | str
+    ) -> Any:
+        """
+        Function to get the reserve data
+        """
+
+        caller = FunctionCaller(POOL_DATA_PROVIDER_V2_ADDRESS, self.w3)
+        return caller.call_function(
+            "getReserveData", block_identifier, [reserve_address]
+        )
+
     def get_asset_price(self, asset: str, block_identifier: int | str) -> Any:
         """
         Function to get the asset price
         """
 
         caller = FunctionCaller(PRICE_ORACLE_V2_ADDRESS, self.w3)
-        return caller.call_function("getAssetPrice", block_identifier, [asset])
+        return (
+            caller.call_function("getAssetPrice", block_identifier, [asset]) * 10**-18
+        )
+
+    def get_asset_prices(self, asset_list: list, block_identifier: int | str) -> Any:
+        """
+        Function to get the asset prices
+        """
+
+        caller = FunctionCaller(PRICE_ORACLE_V2_ADDRESS, self.w3)
+        return [
+            _ * 10**-18
+            for _ in caller.call_function(
+                "getAssetsPrices", block_identifier, [asset_list]
+            )
+        ]
 
     def underlying_asset_address(
         self, atoken_address: str, block_identifier: int | str
@@ -201,9 +228,5 @@ class AaveV2:
 if __name__ == "__main__":
     ptc = AaveV2(w3)
     # print(ptc.token_breakdown("latest"))
-    print(
-        ptc.underlying_asset_address(
-            "0x030bA81f1c18d280636F32af80b9AAd02Cf0854e", "latest"
-        )
-    )
+    print(ptc.get_reserve_data("0xdAC17F958D2ee523a2206206994597C13D831ec7", "latest"))
     pass
