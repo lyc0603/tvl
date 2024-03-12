@@ -11,7 +11,7 @@ from scripts.process.ind_tvl import aave, lido_eth
 
 for df, name in [(lido_eth, "lido"), (aave, "aave")]:
     # plot the area chart
-    plt.figure(figsize=(8, 4))
+    plt.figure(figsize=(6, 4))
     plt.fill_between(
         df.index,
         df["Receivables"],
@@ -37,7 +37,7 @@ for df, name in [(lido_eth, "lido"), (aave, "aave")]:
     )
 
     # remove "token" from the legend
-    plt.legend(loc="upper left", ncol=2, title="")
+    plt.legend(loc="upper left", ncol=2, title="", fontsize=10)
 
     # x axis in the format of %Y-%m-%d
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
@@ -61,10 +61,13 @@ for df, name in [(lido_eth, "lido"), (aave, "aave")]:
 
     # add x , y label
     plt.xlabel("")
-    plt.ylabel("Dollar Amount")
+    plt.ylabel("Dollar Amount", fontsize=12)
 
     # rotate the xticks
     plt.xticks(rotation=90)
+
+    # xy tick size
+    plt.tick_params(axis="both", which="major", labelsize=10)
 
     # tight layout
     plt.tight_layout()
