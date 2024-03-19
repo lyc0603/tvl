@@ -13,7 +13,7 @@ colors = [(0.5, 0.5, 1), (1, 1, 1), (1, 0.5, 0.5)]  # Light red, white, light bl
 color_map = LinearSegmentedColormap.from_list("custom", colors)
 
 # calculate the log return
-# df_corr = np.log(df_corr).diff().dropna()
+df_corr = np.log(df_corr).diff().dropna()
 
 
 def asterisk(p_value: float) -> str:
@@ -52,5 +52,5 @@ corr_latex = corr_with_color.to_latex(
 )
 
 # add significance level to the latex
-with open(f"{TABLE_PATH}/corr.tex", "w", encoding="utf-8") as f:
+with open(f"{TABLE_PATH}/log_corr.tex", "w", encoding="utf-8") as f:
     f.write(corr_latex)

@@ -5,13 +5,21 @@ Function to plot the decomposition of the tvl time series
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
+import pandas as pd
 
 from environ.constants import (
     CHAIN_LIST,
     PROCESSED_DATA_PATH,
     FIGURE_PATH,
+    SAMPLE_DATA_DICT,
 )
 from environ.process.preprocess_defillama_tvl import preprocess_total_tvl
+
+EVENT_INFO_DICT = {
+    "max_tvl": {"label": "Max TVL", "ls": "dashdot"},
+    "luna_collapse": {"label": "Luna Collapse", "ls": "dashed"},
+    "ftx_collapse": {"label": "FTX Collapse", "ls": "dotted"},
+}
 
 for chain in CHAIN_LIST:
     if chain == "Total":
@@ -54,11 +62,14 @@ for chain in CHAIN_LIST:
         alpha=0.5,
     )
 
-    # show the legend on the upper left corner
-    plt.legend(loc="upper left")
-
-    # change the font size of the legend
-    plt.legend(prop={"size": 15})
+    for event, date in SAMPLE_DATA_DICT.items():
+        plt.axvline(
+            pd.to_datetime(date),
+            color="black",
+            linewidth=1,
+            label=EVENT_INFO_DICT[event]["label"],
+            ls=EVENT_INFO_DICT[event]["ls"],
+        )
 
     # add the grid and increase the opacity and increase the intensity
     plt.grid(alpha=0.3)
@@ -87,12 +98,14 @@ for chain in CHAIN_LIST:
     if chain == "Total":
         plt.xticks(fontsize=6)
         plt.yticks(fontsize=6)
-        plt.legend(prop={"size": 6})
+        # show the legend on the upper left corner with two columns
+        plt.legend(loc="upper left", ncol=3, prop={"size": 6})
     else:
         # if the chain is not total, make the ticks and legend bigger
         plt.xticks(fontsize=6)
         plt.yticks(fontsize=6)
-        plt.legend(prop={"size": 6})
+        # show the legend on the upper left corner with two columns
+        plt.legend(loc="upper left", ncol=3, prop={"size": 6})
 
     # rotate the xticks
     plt.xticks(rotation=90)
