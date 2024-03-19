@@ -1,5 +1,7 @@
 """This file contains the configuration settings for the market environment."""
 
+import numpy as np
+
 from environ.settings import PROJECT_ROOT
 
 # Paths
@@ -7,12 +9,74 @@ DATA_PATH = PROJECT_ROOT / "data"
 FIGURE_PATH = PROJECT_ROOT / "figures"
 PROCESSED_DATA_PATH = PROJECT_ROOT / "processed_data"
 
+# DeFiLlama TVL
+END_OF_SAMPLE_PERIOD = "2024-03-01"
+BEGINNING_OF_SAMPLE_PERIOD = "2019-06-01"
+CHAIN_LIST = [
+    "Total",
+    # "Ethereum",
+    # "Tron",
+    # "Binance",
+    # "Arbitrum",
+    # "Polygon",
+    # "Optimism",
+    # "Avalanche",
+    # "Mixin",
+    # "Solana",
+]
+TOKEN_CATEGORY_SPECIAL_CASE = {
+    "WETH": {
+        "name": "Wrapped ETH",
+        "symbol": "WETH",
+        "token_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "category": "Wrapped Tokens",
+        "stable_type": np.nan,
+    }
+}
+
+# The Token category URLs
+CMC_GOV = (
+    "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?"
+    + "start=1&limit=200&sortBy=market_cap&sortType=desc&convert=USD,BTC,ETH&"
+    + "cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,"
+    + "num_market_pairs,cmc_rank,date_added,tags,platform,max_supply,circulating_supply,"
+    + "self_reported_circulating_supply,self_reported_market_cap,total_supply,volume_7d,"
+    + "volume_30d&tagSlugs=governance"
+)
+CMC_WRAPPED = (
+    "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?"
+    + "start=1&limit=100&sortBy=market_cap&sortType=desc&convert=USD,BTC,ETH&"
+    + "cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,num_market_pairs,"
+    + "cmc_rank,date_added,tags,platform,max_supply,circulating_supply,"
+    + "self_reported_circulating_supply,self_reported_market_cap,total_supply,volume_7d,"
+    + "volume_30d&tagSlugs=wrapped-tokens"
+)
+CMC_LAYER_ONE = (
+    "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?"
+    + "start=1&limit=100&sortBy=market_cap&sortType=desc&convert=USD,BTC,ETH&"
+    + "cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,num_market_pairs,"
+    + "cmc_rank,date_added,tags,platform,max_supply,circulating_supply,"
+    + "self_reported_circulating_supply,self_reported_market_cap,total_supply,volume_7d,"
+    + "volume_30d&tagSlugs=layer-1"
+)
+
+CMC_LAYER_TWO = (
+    "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?"
+    + "start=1&limit=100&sortBy=market_cap&sortType=desc&convert=USD,BTC,ETH&"
+    + "cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,num_market_pairs,"
+    + "cmc_rank,date_added,tags,platform,max_supply,circulating_supply,"
+    + "self_reported_circulating_supply,self_reported_market_cap,total_supply,volume_7d,"
+    + "volume_30d&tagSlugs=layer-2"
+)
+
+LLAMA_STABLE = "https://stablecoins.llama.fi/stablecoins?includePrices=true"
+
 # sample date
 SAMPLE_DATA_DICT = {
     "max_tvl": "2021-12-26",
     "luna_collapse": "2022-05-09",
     "ftx_collapse": "2022-11-08",
-    "current_date": "2023-07-01",
+    # "current_date": "2023-07-01",
 }
 
 # Coingecko API KEY

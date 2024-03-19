@@ -2,6 +2,7 @@
 Script to fetch data from CoinGecko API
 """
 
+import json
 import time
 from multiprocessing import Pool
 
@@ -10,7 +11,6 @@ from retry import retry
 from tqdm import tqdm
 
 from environ.constants import COINGECKO_API_KEY, DATA_PATH
-import json
 
 
 class CoinGecko:

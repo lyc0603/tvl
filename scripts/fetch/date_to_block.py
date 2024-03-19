@@ -5,11 +5,11 @@ Script to fetch the date to block data
 import pandas as pd
 from tqdm import tqdm
 
-from environ.constants import SAMPLE_DATA_DICT, DATA_PATH
+from environ.constants import DATA_PATH, END_OF_SAMPLE_PERIOD, SAMPLE_DATA_DICT
 from environ.fetch.block import date_close_to_block
 
 START_DATE = "2020-11-30"
-END_DATE = SAMPLE_DATA_DICT["current_date"]
+END_DATE = END_OF_SAMPLE_PERIOD
 
 date_range = (
     pd.date_range(START_DATE, END_DATE, freq="D")
