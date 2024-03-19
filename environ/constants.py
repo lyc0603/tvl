@@ -7,6 +7,7 @@ from environ.settings import PROJECT_ROOT
 # Paths
 DATA_PATH = PROJECT_ROOT / "data"
 FIGURE_PATH = PROJECT_ROOT / "figures"
+TABLE_PATH = PROJECT_ROOT / "tables"
 PROCESSED_DATA_PATH = PROJECT_ROOT / "processed_data"
 
 # FRED

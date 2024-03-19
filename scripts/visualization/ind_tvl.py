@@ -29,7 +29,9 @@ for df, name in [(lido_eth, "lido"), (aave, "aave")]:
     )
 
     # plot the line chart
-    df["TVL"].plot(
+    plt.plot(
+        df.index,
+        df["TVL"],
         color="#1f77b4",
         linestyle="-",
         linewidth=2,
@@ -43,7 +45,7 @@ for df, name in [(lido_eth, "lido"), (aave, "aave")]:
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
 
     # control the frequency of the x axius
-    plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval=1))
+    plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval=2))
 
     # set the unit of the y axis
     plt.gca().yaxis.get_major_formatter().set_useOffset(False)
