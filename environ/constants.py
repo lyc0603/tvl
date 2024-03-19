@@ -9,6 +9,23 @@ DATA_PATH = PROJECT_ROOT / "data"
 FIGURE_PATH = PROJECT_ROOT / "figures"
 PROCESSED_DATA_PATH = PROJECT_ROOT / "processed_data"
 
+# FRED
+FRED_DICT = {
+    "BOGMBASE": "M0",
+    "M2NS": "M2",
+    "DFF": "FFER",
+    "CORESTICKM159SFRBATL": "CPI",
+    "VIXCLS": "VIX",
+}
+FRED_API_KEY = "69cc1d5bf003f619a45787cff227f647"
+
+# Etherscan
+USER_AGENT = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    + "AppleWebKit/537.36 (KHTML, like Gecko) "
+    + "Chrome/111.0.0.0 Safari/537.36"
+)
+
 # DeFiLlama TVL
 END_OF_SAMPLE_PERIOD = "2024-03-01"
 BEGINNING_OF_SAMPLE_PERIOD = "2019-06-01"
@@ -32,6 +49,17 @@ TOKEN_CATEGORY_SPECIAL_CASE = {
         "category": "Wrapped Tokens",
         "stable_type": np.nan,
     }
+}
+
+CORR_NAMING_DICT = {
+    "CPI": "$CPI_t$",
+    "FFER": "$FFER_t$",
+    "VIX": "$VIX_t$",
+    "gasprice": "$Gas_t$",
+    "etherprice": "$ETH_t$",
+    "s&p": "$S&P_t$",
+    "leverage": "$M_t^{DeFi}$",
+    "multiplier": "$M_t^{TradFi}$",
 }
 
 # The Token category URLs
