@@ -79,7 +79,6 @@ for event, date in SAMPLE_DATA_DICT.items():
     cbar.set_label("TVL / TVR", rotation=270, labelpad=20, fontsize=20)
 
     plt.tight_layout()
-    plt.show()
     plt.savefig(
         f"{FIGURE_PATH}/hedera_network_{event}.pdf",
         dpi=2000,

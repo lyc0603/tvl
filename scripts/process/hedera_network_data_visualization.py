@@ -17,7 +17,6 @@ from environ.fetch.block import date_close_to_timestamp
 GRAPH_DICT = {}
 multiplier_dict = {}
 protocol_dict_not_zero = {}
-tvl_dict = {}
 
 ptc_list = ["SaucerSwap", "Stader", "DaVinciGraph", "HeliSwap", "Pangolin"]
 CLASS_DEFILLAMA_MAPPING = {
@@ -33,7 +32,6 @@ for event, date in SAMPLE_DATA_DICT.items():
     G = nx.DiGraph()
     multiplier_dict[event] = {}
     protocol_dict_not_zero[event] = []
-    tvl_dict[event] = {"flows": []}
 
     ptc_multiplier_not_one = []
 
