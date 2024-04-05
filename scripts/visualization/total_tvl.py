@@ -35,17 +35,17 @@ for chain in CHAIN_LIST:
     # sort the dataframe by date
     df_agg = df_agg.sort_values(by="date", ascending=True)
 
-    # if the chain is Mixin, ffill the totalLiquidityUSD in 2022-11-06 to 2022-11-08
-    if chain == "Mixin":
-        df_agg.loc[
-            (df_agg["date"] >= "2022-11-06") & (df_agg["date"] <= "2022-11-08"),
-            "totalLiquidityUSD",
-        ] = df_agg.loc[
-            (df_agg["date"] == "2022-11-05"),
-            "totalLiquidityUSD",
-        ].values[
-            0
-        ]
+    # # if the chain is Mixin, ffill the totalLiquidityUSD in 2022-11-06 to 2022-11-08
+    # if chain == "Mixin":
+    #     df_agg.loc[
+    #         (df_agg["date"] >= "2022-11-06") & (df_agg["date"] <= "2022-11-08"),
+    #         "totalLiquidityUSD",
+    #     ] = df_agg.loc[
+    #         (df_agg["date"] == "2022-11-05"),
+    #         "totalLiquidityUSD",
+    #     ].values[
+    #         0
+    #     ]
 
     # plot the tvl with DC, tvl, and tvr
     for col, info in PLOT_INFO_DICT.items():
