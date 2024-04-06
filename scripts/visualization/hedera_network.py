@@ -59,6 +59,7 @@ for event, date in SAMPLE_DATA_DICT.items():
         ],
         connectionstyle="arc3,rad=0.3",
         arrowstyle="-|>",
+        arrowsize=40,
     )
 
     # nx.draw(
