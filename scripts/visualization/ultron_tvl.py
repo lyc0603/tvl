@@ -10,7 +10,7 @@ import pandas as pd
 
 from environ.constants import FIGURE_PATH
 
-fig, axes = plt.subplots(
+fig, ax1 = plt.subplots(
     figsize=(5, 2),
 )
 
@@ -24,46 +24,60 @@ EVENT_INFO_DICT = {
 }
 
 
-# plot the tvl with DC, tvl, and tvr
-for col, info in PLOT_INFO_DICT.items():
-    axes.plot(
-        df_ultron["date"],
-        df_ultron[col],
-        label=info["label"],
-        color=info["color"],
-        linewidth=1,
-    )
+p1 = ax1.plot(
+    df_ultron["date"],
+    df_ultron["tvl"],
+    label=PLOT_INFO_DICT["tvl"]["label"],
+    color=PLOT_INFO_DICT["tvl"]["color"],
+    linewidth=1,
+)
+ax1.set_ylabel(PLOT_INFO_DICT["tvl"]["label"] + ", Dollar Amount", fontsize=6)
+ax1.tick_params(axis="y", labelcolor=PLOT_INFO_DICT["tvl"]["color"])
+
+
+ax2 = ax1.twinx()
+p2 = ax2.plot(
+    df_ultron["date"],
+    df_ultron["tvr"],
+    label=PLOT_INFO_DICT["tvr"]["label"],
+    color=PLOT_INFO_DICT["tvr"]["color"],
+    linewidth=1,
+)
+ax2.set_ylabel(PLOT_INFO_DICT["tvr"]["label"] + ", Dollar Amount", fontsize=6)
+ax2.tick_params(axis="y", labelcolor=PLOT_INFO_DICT["tvr"]["color"])
 
 # show the legend on the upper left corner
-plt.legend(loc="upper left", fontsize=6, frameon=False)
+plt.legend(handles=p1 + p2, loc="upper right", fontsize=6, frameon=False)
 
 # add the grid and increase the opacity and increase the intensity
-plt.grid(alpha=0.3)
+ax1.grid(alpha=0.3)
 
-# set the unit of the x axis
-plt.gca().xaxis.set_major_formatter(
-    mdates.DateFormatter("%Y-%m"),
-)
+# # set the unit of the x axis
+# plt.gca().xaxis.set_major_formatter(
+#     mdates.DateFormatter("%Y-%m"),
+# )
 plt.gca().xaxis.set_major_locator(
     mdates.MonthLocator(interval=1),
 )
 
-# label the y axis
-plt.ylabel("Dollar Amount", fontsize=6)
 
-# set the unit of the y axis
-plt.gca().yaxis.get_major_formatter().set_useOffset(False)
-plt.gca().yaxis.set_major_formatter(
-    plt.FuncFormatter(lambda x, loc: "{:.0f}M".format(x / 1e6))
-)
-plt.gca().yaxis.set_major_locator(ticker.MultipleLocator(base=200e6))
+# Define a function to format y-axis tick labels
+def millions_formatter(x, pos):
+    return "{:.0f}M".format(x / 1e6)
 
-plt.xticks(fontsize=6)
-plt.yticks(fontsize=6)
-# plt.legend(prop={"size": 6})
+
+# Set the formatter for both y-axes
+ax1.yaxis.set_major_formatter(ticker.FuncFormatter(millions_formatter))
+ax2.yaxis.set_major_formatter(ticker.FuncFormatter(millions_formatter))
+
+# set the fontsize of the x and y axis
+ax1.tick_params(axis="x", labelsize=6)
+ax1.tick_params(axis="y", labelsize=6)
+ax2.tick_params(axis="y", labelsize=6)
 
 # rotate the xticks
-plt.xticks(rotation=90)
+fig.autofmt_xdate(rotation=90)
+
 
 # tight layout
 plt.tight_layout()
