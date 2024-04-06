@@ -27,13 +27,13 @@ for event, date in SAMPLE_DATA_DICT.items():
     node_colors = [multiplier_dict[event][ptc.__class__.__name__] for ptc in ptc_list]
     cmap = plt.cm.Reds
 
-    # nx.draw_networkx_nodes(
-    #     GRAPH_DICT[event],
-    #     pos,
-    #     node_size=[i / NODE_SIZE_SCALER for i in list(node_sizes.values())],
-    #     node_color=edge_colors,
-    #     node_cmap=cmap,
-    # )
+    nx.draw_networkx_nodes(
+        GRAPH_DICT[event],
+        pos,
+        node_size=[i / NODE_SIZE_SCALER for i in list(node_sizes.values())],
+        node_color=node_colors,
+        cmap=cmap,
+    )
 
     # draw the edges with the weights
     nx.draw_networkx_edges(
@@ -45,13 +45,13 @@ for event, date in SAMPLE_DATA_DICT.items():
         arrowstyle="-|>",
     )
 
-    nx.draw(
-        GRAPH_DICT[event],
-        pos,
-        node_color=node_colors,
-        node_size=[i / NODE_SIZE_SCALER for i in list(node_sizes.values())],
-        cmap=cmap,
-    )
+    # nx.draw(
+    #     GRAPH_DICT[event],
+    #     pos,
+    #     node_color=node_colors,
+    #     node_size=[i / NODE_SIZE_SCALER for i in list(node_sizes.values())],
+    #     cmap=cmap,
+    # )
 
     nx.draw_networkx_labels(
         GRAPH_DICT[event], pos, font_size=20, verticalalignment="bottom"
@@ -67,7 +67,7 @@ for event, date in SAMPLE_DATA_DICT.items():
     cbar.set_label("TVL / TVR", rotation=270, labelpad=20, fontsize=20)
 
     plt.tight_layout()
-    plt.show()
+    # plt.show()
     plt.savefig(
         f"{FIGURE_PATH}/network_{event}.pdf",
         dpi=2000,
