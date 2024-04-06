@@ -67,6 +67,7 @@ for event, date in SAMPLE_DATA_DICT.items():
     cbar.set_label("TVL / TVR", rotation=270, labelpad=20, fontsize=20)
 
     plt.tight_layout()
+    plt.axis("off")
     # plt.show()
     plt.savefig(
         f"{FIGURE_PATH}/network_{event}.pdf",
