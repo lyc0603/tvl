@@ -233,3 +233,38 @@ for event, date in SAMPLE_DATA_DICT.items():
     ) as f:
         for line in hedera_dict[event]:
             f.write(json.dumps(line) + "\n")
+
+df_hbarx.rename(columns={"timestampSeconds": "date"}, inplace=True)
+df_hbarx["date"] = pd.to_datetime(df_hbarx["date"])
+
+df_heli_hbarx.rename(columns={"time": "date"}, inplace=True)
+df_heli_hbarx["date"] = pd.to_datetime(df_heli_hbarx["date"])
+
+df_pangolin_hbarx.rename(columns={"date": "date"}, inplace=True)
+df_pangolin_hbarx["date"] = pd.to_datetime(df_pangolin_hbarx["date"])
+
+df_dc = df_hbarx[["date", "liquidityUsd"]].copy()
+df_dc = df_dc.merge(df_heli_hbarx, on="date", how="outer")
+df_dc = df_dc.merge(
+    df_pangolin_hbarx[["date", "totalLiquidityUSD"]],
+    on="date",
+    how="outer",
+)
+
+# replace NaN with 0
+df_dc.fillna(0, inplace=True)
+
+df_dc = df_dc.rename(
+    columns={
+        "liquidityUsd": "SaucerSwap",
+        "tvl": "HeliSwap",
+        "totalLiquidityUSD": "Pangolin",
+    }
+)
+df_dc["total"] = (
+    df_dc["SaucerSwap"].map(float)
+    + df_dc["HeliSwap"].map(float)
+    + df_dc["Pangolin"].map(float)
+)
+
+df_dc.to_csv(f"{PROCESSED_DATA_PATH}/hedera/double_counting.csv", index=False)
