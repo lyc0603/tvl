@@ -16,7 +16,7 @@ fig, ax1 = plt.subplots(
 
 PLOT_INFO_DICT = {
     "tvl": {"label": "$TVL^{Adj}_{t}$", "color": "blue"},
-    "tvr": {"label": "$TVL_t$ / $TVR_t$", "color": "red"},
+    "tvr": {"label": "$TVL_t$ or $TVR_t$", "color": "red"},
 }
 
 EVENT_INFO_DICT = {
