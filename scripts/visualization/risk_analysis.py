@@ -34,7 +34,7 @@ for event, date in SAMPLE_DATA_DICT.items():
         fig, axes = (
             plt.subplots(figsize=(6, 6))
             if event != "luna_collapse"
-            else plt.subplots(figsize=(5.8, 6))
+            else plt.subplots(figsize=(6.2, 6))
         )
 
         ls_list = []
