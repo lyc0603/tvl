@@ -2,8 +2,16 @@
 Script to perform risk analysis on the data
 """
 
+import json
+
 import matplotlib.pyplot as plt
-from environ.constants import SAMPLE_DATA_DICT, params_dict, FIGURE_PATH
+
+from environ.constants import (
+    FIGURE_PATH,
+    PROCESSED_DATA_PATH,
+    SAMPLE_DATA_DICT,
+    params_dict,
+)
 
 # from scripts.process.risk_analysis import risk_dict, depeg_dict
 
@@ -14,16 +22,25 @@ PARAMS_NAMEING_MAPPING = {
     "$\\psi_{1,AAVE}$": "aave_t",
 }
 
+with open(f"{PROCESSED_DATA_PATH}/risk/risk_dict.json", "r", encoding="utf-8") as f:
+    risk_dict = json.load(f)
+
+with open(f"{PROCESSED_DATA_PATH}/risk/depeg_dict.json", "r", encoding="utf-8") as f:
+    depeg_dict = json.load(f)
 
 for event, date in SAMPLE_DATA_DICT.items():
     for params, params_grid in params_dict.items():
         # figure size
-        fig, axes = plt.subplots(figsize=(6, 6))
+        fig, axes = (
+            plt.subplots(figsize=(6, 6))
+            if event != "luna_collapse"
+            else plt.subplots(figsize=(5.8, 6))
+        )
 
         ls_list = []
 
         for params_idx, target_params in enumerate(params_grid[params]):
-
+            target_params = str(target_params)
             # figure size
             axes.plot(
                 risk_dict[params][target_params][event]["eth_decline_pct"],
@@ -44,6 +61,7 @@ for event, date in SAMPLE_DATA_DICT.items():
             ls_list.append(f"{target_params}")
 
         for params_idx, target_params in enumerate(params_grid[params]):
+            target_params = str(target_params)
             # plot the shading after depeg
             if (
                 len(depeg_dict[params][target_params][event]["depeg_eth_decline_pct"])

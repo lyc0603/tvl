@@ -10,7 +10,7 @@ import numpy as np
 
 from scripts.process.network_data_visualization import GRAPH_DICT
 from scripts.process.network_multiplier import multiplier_dict
-from environ.constants import SAMPLE_DATA_DICT, FIGURE_PATH
+from environ.constants import SAMPLE_DATA_DICT, FIGURE_PATH, PROCESSED_DATA_PATH
 from scripts.rep_ptc import ptc_list
 
 NODE_SIZE_SCALER = 1000000
