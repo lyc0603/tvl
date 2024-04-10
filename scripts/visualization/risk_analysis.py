@@ -31,11 +31,7 @@ with open(f"{PROCESSED_DATA_PATH}/risk/depeg_dict.json", "r", encoding="utf-8") 
 for event, date in SAMPLE_DATA_DICT.items():
     for params, params_grid in params_dict.items():
         # figure size
-        fig, axes = (
-            plt.subplots(figsize=(6, 6))
-            if event != "luna_collapse"
-            else plt.subplots(figsize=(6.2, 6))
-        )
+        fig, axes = plt.subplots(figsize=(6, 6))
 
         ls_list = []
 
@@ -130,7 +126,10 @@ for event, date in SAMPLE_DATA_DICT.items():
         legend1.get_lines()[1].set_color("black")
 
         # tight layout
-        plt.tight_layout()
+        if event == "luna_collapse":
+            plt.tight_layout(w_pad=0.5)
+        else:
+            plt.tight_layout()
 
         plt.gca().yaxis.set_major_formatter(
             plt.FuncFormatter(lambda x, loc: "{:.1f}B".format(x / 1e9))
