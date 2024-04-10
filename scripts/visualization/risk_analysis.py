@@ -128,6 +128,7 @@ for event, date in SAMPLE_DATA_DICT.items():
         plt.gca().yaxis.set_major_formatter(
             plt.FuncFormatter(lambda x, loc: "{:.1f}B".format(x / 1e9))
         )
+        plt.subplots_adjust(left=0.15)
 
         plt.savefig(
             f"{FIGURE_PATH}/sensitivity_{event}_{PARAMS_NAMEING_MAPPING[params]}.pdf",
