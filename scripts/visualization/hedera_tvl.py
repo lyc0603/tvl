@@ -28,6 +28,7 @@ for col, info in PLOT_INFO_DICT.items():
         label=info["label"],
         color=info["color"],
         linewidth=1,
+        alpha=1 if col == "tvr" else 0.7,
     )
 
 # show the legend on the upper left corner
