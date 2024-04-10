@@ -129,7 +129,7 @@ for event, date in SAMPLE_DATA_DICT.items():
             plt.FuncFormatter(lambda x, loc: "{:.1f}B".format(x / 1e9))
         )
         plt.subplots_adjust(left=0.25)
-
+        plt.tight_layout()
         plt.savefig(
             f"{FIGURE_PATH}/sensitivity_{event}_{PARAMS_NAMEING_MAPPING[params]}.pdf",
             dpi=2000,
