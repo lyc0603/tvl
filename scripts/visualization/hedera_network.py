@@ -18,7 +18,7 @@ from scripts.process.hedera_network_data_visualization import (
 # from scripts.process.network_multiplier import multiplier_dict
 from environ.constants import SAMPLE_DATA_DICT, FIGURE_PATH
 
-NODE_SIZE_SCALER = 10000
+NODE_SIZE_SCALER = 7500
 EDGE_WIDTHS_LINEAR_SCALER = 250
 EDGE_WIDTHS_NONLINEAR_SCALER = 2
 
@@ -53,10 +53,7 @@ for event, date in SAMPLE_DATA_DICT.items():
             i ** (1 / EDGE_WIDTHS_NONLINEAR_SCALER) / EDGE_WIDTHS_LINEAR_SCALER
             for i in list(edge_widths.values())
         ],
-        node_size=[
-            i ** (1 / EDGE_WIDTHS_NONLINEAR_SCALER) / NODE_SIZE_SCALER
-            for i in list(node_sizes.values())
-        ],
+        node_size=[i / NODE_SIZE_SCALER for i in list(node_sizes.values())],
         connectionstyle="arc3,rad=0.3",
         arrowstyle="-|>",
         arrowsize=40,

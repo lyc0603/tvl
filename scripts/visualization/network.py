@@ -43,6 +43,7 @@ for event, date in SAMPLE_DATA_DICT.items():
         node_size=[i / NODE_SIZE_SCALER for i in list(node_sizes.values())],
         connectionstyle="arc3,rad=0.3",
         arrowstyle="-|>",
+        arrowsize=40,
     )
 
     # nx.draw(
