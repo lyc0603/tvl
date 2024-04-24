@@ -5,10 +5,33 @@ Script to plot the comparison of money supply between the trafi and defi
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import pandas as pd
+import json
 
 from scripts.process.money_multiplier import money_multiplier_dict
 from scripts.process.leverage_ratio import leverage_ratio_dict
-from environ.constants import FIGURE_PATH, SAMPLE_DATA_DICT
+from environ.constants import FIGURE_PATH, SAMPLE_DATA_DICT, DATA_PATH
+
+
+def parse_token_prc(cg_id: str) -> pd.DataFrame:
+    """
+    Function to parse the token price json
+    """
+
+    with open(DATA_PATH / "token_price" / f"{cg_id}.json", "r", encoding="utf-8") as f:
+        token_price = json.load(f)
+
+    price = [_[1] for _ in token_price["prices"]]
+    timestamp = [_[0] for _ in token_price["prices"]]
+
+    df = pd.DataFrame({"price": price, "timestamp": timestamp})
+    df["date"] = pd.to_datetime(df["timestamp"], unit="ms")
+    df.drop(columns=["timestamp"], inplace=True)
+    df["eth_price"] = df["price"].shift(-1)
+
+    return df
+
+
+eth_price = parse_token_prc("ethereum")
 
 EVENT_INFO_DICT = {
     "max_tvl": {"label": "Max TVL", "ls": "dashdot"},
@@ -16,8 +39,6 @@ EVENT_INFO_DICT = {
     "ftx_collapse": {"label": "FTX Collapse", "ls": "dotted"},
 }
 
-# set the figure size
-plt.figure(figsize=(5, 2))
 
 df_money_supplier = pd.DataFrame(money_multiplier_dict)
 df_money_supplier.rename(
@@ -30,8 +51,17 @@ df_leverage_ratio.rename(
     inplace=True,
 )
 
+df_leverage_ratio.loc[df_leverage_ratio["date"] == "2021-04-05", "leverage_ratio"] = (
+    df_leverage_ratio.loc[df_leverage_ratio["date"] == "2021-04-04", "leverage_ratio"]
+)
+
 df_agg = df_leverage_ratio.merge(
     df_money_supplier,
+    how="left",
+    on="date",
+)
+df_agg = df_agg.merge(
+    eth_price,
     how="left",
     on="date",
 )
@@ -44,6 +74,13 @@ PLOT_DICT = {
     #     "markersize": 2,
     #     "linewidth": 1,
     # },
+    "eth_price": {
+        "label": "Ether Price",
+        "color": "blue",
+        "marker": "o",
+        "markersize": 2,
+        "linewidth": 1,
+    },
     "leverage_ratio": {
         "label": "DeFi Money Multiplier",
         "color": "red",
@@ -53,28 +90,72 @@ PLOT_DICT = {
     },
 }
 
-for var, var_plot_info in PLOT_DICT.items():
-    plt.plot(
-        df_agg["date"],
-        df_agg[var],
-        label=var_plot_info["label"],
-        color=var_plot_info["color"],
-        marker=var_plot_info["marker"],
-        markersize=var_plot_info["markersize"],
-        linewidth=var_plot_info["linewidth"],
-    )
+# plot the leverage ratio and eth price in two different y axis
+fig, ax1 = plt.subplots(figsize=(7, 4))
+ax1.plot(
+    df_agg["date"],
+    df_agg["leverage_ratio"],
+    # label=PLOT_DICT["leverage_ratio"]["label"],
+    color=PLOT_DICT["leverage_ratio"]["color"],
+    # marker=PLOT_DICT["leverage_ratio"]["marker"],
+    # markersize=PLOT_DICT["leverage_ratio"]["markersize"],
+    linewidth=PLOT_DICT["leverage_ratio"]["linewidth"],
+)
+
+ax1.set_ylabel("DeFi Money Multiplier", color=PLOT_DICT["leverage_ratio"]["color"])
+ax1.tick_params(axis="y", labelcolor=PLOT_DICT["leverage_ratio"]["color"])
+
+plt.xticks(rotation=90)
+
+ax2 = ax1.twinx()
+
+ax2.plot(
+    df_agg["date"],
+    df_agg["eth_price"],
+    # label=PLOT_DICT["eth_price"]["label"],
+    color=PLOT_DICT["eth_price"]["color"],
+    # marker=PLOT_DICT["eth_price"]["marker"],
+    # markersize=PLOT_DICT["eth_price"]["markersize"],
+    linewidth=PLOT_DICT["eth_price"]["linewidth"],
+)
+
+ax2.set_ylabel("Ether Price", color=PLOT_DICT["eth_price"]["color"])
+ax2.tick_params(axis="y", labelcolor=PLOT_DICT["eth_price"]["color"])
+
+# for var, var_plot_info in PLOT_DICT.items():
+#     plt.plot(
+#         df_agg["date"],
+#         df_agg[var],
+#         label=var_plot_info["label"],
+#         color=var_plot_info["color"],
+#         marker=var_plot_info["marker"],
+#         markersize=var_plot_info["markersize"],
+#         linewidth=var_plot_info["linewidth"],
+#     )
 
 for event, date in SAMPLE_DATA_DICT.items():
     plt.axvline(
         pd.to_datetime(date),
         color="black",
         linewidth=1,
-        label=EVENT_INFO_DICT[event]["label"],
+        # label=EVENT_INFO_DICT[event]["label"],
         ls=EVENT_INFO_DICT[event]["ls"],
     )
+    plt.text(
+        pd.to_datetime(date),
+        0,
+        EVENT_INFO_DICT[event]["label"],
+        rotation=90,
+        # backgroundcolor="white",
+        fontsize=10,
+        horizontalalignment="center",
+        verticalalignment="bottom",
+        # alpha=0.8,
+        # backgroundcolor needs transparency
+    )
 
-# show the legend on the upper right corner
-plt.legend(prop={"size": 6})
+# # show the legend on the upper right corner
+# plt.legend(prop={"size": 6})
 
 # add the grid and increase the opacity and increase the intensity
 plt.grid(alpha=0.3)
@@ -91,15 +172,15 @@ plt.xlim(
 # plt.gca().xaxis.set_major_formatter(
 #     mdates.DateFormatter("%Y-%m"),
 # )
-plt.gca().xaxis.set_major_locator(
-    mdates.MonthLocator(interval=2),
-)
+# plt.gca().xaxis.set_major_locator(
+#     mdates.MonthLocator(interval=2),
+# )
 
-# label the y axis
-plt.ylabel("Ratio")
+# # label the y axis
+# plt.ylabel("Ratio")
 
-# rotate the xticks
-plt.xticks(rotation=90)
+# # rotate the xticks
+# plt.xticks(rotation=45)
 
 # tight layout
 plt.tight_layout()
