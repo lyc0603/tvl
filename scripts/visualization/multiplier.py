@@ -79,14 +79,14 @@ PLOT_DICT = {
         "color": "blue",
         "marker": "o",
         "markersize": 2,
-        "linewidth": 1,
+        "linewidth": 1.5,
     },
     "leverage_ratio": {
         "label": "DeFi Money Multiplier",
         "color": "red",
         "marker": "o",
         "markersize": 2,
-        "linewidth": 1,
+        "linewidth": 1.5,
     },
 }
 
@@ -106,6 +106,12 @@ ax1.set_ylabel("DeFi Money Multiplier", color=PLOT_DICT["leverage_ratio"]["color
 ax1.tick_params(axis="y", labelcolor=PLOT_DICT["leverage_ratio"]["color"])
 
 plt.xticks(rotation=90)
+plt.gca().xaxis.set_major_formatter(
+    mdates.DateFormatter("%Y-%m"),
+)
+plt.gca().xaxis.set_major_locator(
+    mdates.MonthLocator(interval=2),
+)
 
 ax2 = ax1.twinx()
 
