@@ -91,7 +91,7 @@ PLOT_DICT = {
 }
 
 # plot the leverage ratio and eth price in two different y axis
-fig, ax1 = plt.subplots(figsize=(7, 4))
+fig, ax1 = plt.subplots(figsize=(7, 3))
 ax1.plot(
     df_agg["date"],
     df_agg["leverage_ratio"],
