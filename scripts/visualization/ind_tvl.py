@@ -11,7 +11,7 @@ from scripts.process.ind_tvl import aave, lido_eth
 
 for df, name in [(lido_eth, "lido"), (aave, "aave")]:
     # plot the area chart
-    plt.figure(figsize=(5, 4))
+    plt.figure(figsize=(6, 3))
     plt.fill_between(
         df.index,
         df["Receivables"],
