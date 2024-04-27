@@ -31,7 +31,7 @@ with open(f"{PROCESSED_DATA_PATH}/risk/depeg_dict.json", "r", encoding="utf-8") 
 for event, date in SAMPLE_DATA_DICT.items():
     for params, params_grid in params_dict.items():
         # figure size
-        fig, axes = plt.subplots(figsize=(6, 6))
+        fig, axes = plt.subplots(figsize=(6, 4))
 
         ls_list = []
 
@@ -111,15 +111,15 @@ for event, date in SAMPLE_DATA_DICT.items():
         plt.ylabel(r"Change in TVL $\Delta_{TVL}$ and TVR $\Delta_{TVR}$ (USD)")
 
         # increase label and tick size
-        axes.xaxis.label.set_size(18)
-        axes.yaxis.label.set_size(14)
+        axes.xaxis.label.set_size(16)
+        axes.yaxis.label.set_size(12)
 
         # set the x axis range
         axes.xaxis.set_label_coords(0, -0.08)
 
         # increase the font size
-        plt.xticks(fontsize=18)
-        plt.yticks(fontsize=18)
+        plt.xticks(fontsize=16)
+        plt.yticks(fontsize=16)
 
         # set the color of legend 1 line to black
         legend1.get_lines()[0].set_color("black")

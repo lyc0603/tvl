@@ -39,7 +39,7 @@ for df, name in [(lido_eth, "lido"), (aave, "aave")]:
     )
 
     # remove "token" from the legend
-    plt.legend(loc="upper left", ncol=2, title="", fontsize=10)
+    plt.legend(loc="upper left", ncol=2, title="", fontsize=12, frameon=False)
 
     # x axis in the format of %Y-%m-%d
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
@@ -63,13 +63,13 @@ for df, name in [(lido_eth, "lido"), (aave, "aave")]:
 
     # add x , y label
     plt.xlabel("")
-    plt.ylabel("Dollar Amount", fontsize=12)
+    plt.ylabel("Dollar Amount", fontsize=14)
 
     # rotate the xticks
     plt.xticks(rotation=90)
 
     # xy tick size
-    plt.tick_params(axis="both", which="major", labelsize=10)
+    plt.tick_params(axis="both", which="major", labelsize=12)
 
     # tight layout
     plt.tight_layout()
