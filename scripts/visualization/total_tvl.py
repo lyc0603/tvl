@@ -80,18 +80,18 @@ for chain in CHAIN_LIST:
         frameon=False,
         loc="upper right",
         bbox_to_anchor=(0.95, 1),
-        prop={"size": 6},
+        prop={"size": 7},
         title="Metrics",
-        title_fontsize="7",
+        title_fontsize="8",
     )
     legend2 = plt.legend(
         [lines[i] for i in [3, 4, 5]],
         [info["label"] for _, info in EVENT_INFO_DICT.items()],
         frameon=False,
         loc="lower left",
-        prop={"size": 6},
+        prop={"size": 7},
         title="Events",
-        title_fontsize="7",
+        title_fontsize="8",
     )
     axes.add_artist(legend1)
     axes.add_artist(legend2)
@@ -107,11 +107,11 @@ for chain in CHAIN_LIST:
         mdates.DateFormatter("%Y-%m"),
     )
     plt.gca().xaxis.set_major_locator(
-        mdates.MonthLocator(interval=2),
+        mdates.MonthLocator(interval=3),
     )
 
     # label the y axis
-    plt.ylabel("Dollar Amount", fontsize=6)
+    plt.ylabel("Dollar Amount", fontsize=10)
 
     # set the unit of the y axis
     plt.gca().yaxis.get_major_formatter().set_useOffset(False)
@@ -122,8 +122,8 @@ for chain in CHAIN_LIST:
 
     # if the chain is total, make the ticks and legend smaller
     if chain == "Total":
-        plt.xticks(fontsize=6)
-        plt.yticks(fontsize=6)
+        plt.xticks(fontsize=9)
+        plt.yticks(fontsize=9)
         # plt.legend(prop={"size": 6})
     else:
         # if the chain is not total, make the ticks and legend bigger

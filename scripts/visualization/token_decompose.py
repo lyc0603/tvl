@@ -89,17 +89,20 @@ for chain in CHAIN_LIST:
     plt.ylim([0, 1])
 
     # label the y axis
-    plt.ylabel("Percentage of TVR", fontsize=6)
+    plt.ylabel("Percentage of TVR", fontsize=10)
+
+    # x tick frequency
+    plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval=3))
 
     # set the unit of the y axis as 0.2
     plt.gca().yaxis.set_major_locator(ticker.MultipleLocator(0.2))
 
     # if the chain is total, make the ticks and legend smaller
     if chain == "Total":
-        plt.xticks(fontsize=6)
-        plt.yticks(fontsize=6)
+        plt.xticks(fontsize=8)
+        plt.yticks(fontsize=8)
         # show the legend on the upper left corner with two columns
-        plt.legend(loc="upper left", ncol=3, prop={"size": 6})
+        plt.legend(loc="upper left", ncol=3, prop={"size": 6.7}, frameon=False)
     else:
         # if the chain is not total, make the ticks and legend bigger
         plt.xticks(fontsize=6)
@@ -109,6 +112,9 @@ for chain in CHAIN_LIST:
 
     # rotate the xticks
     plt.xticks(rotation=90)
+
+    # xy tick size
+    plt.tick_params(axis="both", which="major", labelsize=10)
 
     # tight layout
     plt.tight_layout()
