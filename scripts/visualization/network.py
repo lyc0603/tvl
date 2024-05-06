@@ -33,6 +33,8 @@ for event, date in SAMPLE_DATA_DICT.items():
         node_size=[i / NODE_SIZE_SCALER for i in list(node_sizes.values())],
         node_color=node_colors,
         cmap=cmap,
+        vmax=6,
+        vmin=0,
     )
 
     # draw the edges with the weights
@@ -59,7 +61,7 @@ for event, date in SAMPLE_DATA_DICT.items():
     )
 
     # add color bar
-    sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(0, 6))
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(0, max(node_colors)))
     sm.set_array([])
 
     # make the color bar tick size bigger
