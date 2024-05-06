@@ -59,13 +59,13 @@ for event, date in SAMPLE_DATA_DICT.items():
     )
 
     # add color bar
-    sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(0, max(node_colors)))
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(0, 6))
     sm.set_array([])
 
     # make the color bar tick size bigger
     cbar = plt.colorbar(sm, orientation="vertical")
     cbar.ax.tick_params(labelsize=25)
-    cbar.set_label("TVL / TVR", rotation=270, labelpad=20, fontsize=25)
+    cbar.set_label(r"$\frac{TVL}{TVR}$", rotation=270, labelpad=40, fontsize=25)
 
     plt.tight_layout()
     plt.axis("off")
