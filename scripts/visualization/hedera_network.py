@@ -74,7 +74,7 @@ for event, date in SAMPLE_DATA_DICT.items():
     # make the color bar tick size bigger
     cbar = plt.colorbar(sm, orientation="vertical")
     cbar.ax.tick_params(labelsize=20)
-    cbar.set_label("TVL / TVR", rotation=270, labelpad=20, fontsize=20)
+    cbar.set_label(r"$\frac{TVL}{TVR}$", rotation=270, labelpad=40, fontsize=20)
 
     plt.tight_layout()
     plt.savefig(

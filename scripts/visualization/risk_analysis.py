@@ -105,7 +105,7 @@ for event, date in SAMPLE_DATA_DICT.items():
         plt.grid(alpha=0.3)
 
         # x and y labels
-        plt.xlabel(r"ETH Price Decline in Percentage, $d$", loc="left")
+        plt.xlabel(r"ETH Price Decline in Percentage", loc="left")
 
         # set the y label
         plt.ylabel(r"Change in TVL $\Delta_{TVL}$ and TVR $\Delta_{TVR}$ (USD)")
