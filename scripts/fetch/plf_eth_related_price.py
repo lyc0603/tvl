@@ -7,6 +7,7 @@ from environ.constants import SAMPLE_DATA_DICT, DATA_PATH, DAI_ADDRESS
 from environ.fetch.block import date_close_to_block, date_close_to_timestamp
 import os
 import json
+from tqdm import tqdm
 
 defillama = DeFiLlama()
 
@@ -41,7 +42,7 @@ eth_related_price_dict = {}
 if not os.path.exists(DATA_PATH / "eth_related_price.json"):
     for event, date in SAMPLE_DATA_DICT.items():
         eth_related_price_dict[event] = {}
-        for token in PLF_ETH_RELATED_TOKEN:
+        for token in tqdm(PLF_ETH_RELATED_TOKEN):
             if token in ETH_UNI_TOKEN + DAI_UNI_TOKEN:
                 price = defillama.get_lp_derivative_price(
                     token,

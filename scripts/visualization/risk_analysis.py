@@ -22,10 +22,14 @@ PARAMS_NAMEING_MAPPING = {
     "$\\psi_{1,AAVE}$": "aave_t",
 }
 
-with open(f"{PROCESSED_DATA_PATH}/risk/risk_dict.json", "r", encoding="utf-8") as f:
+with open(
+    f"{PROCESSED_DATA_PATH}/risk/risk_dict_slashing.json", "r", encoding="utf-8"
+) as f:
     risk_dict = json.load(f)
 
-with open(f"{PROCESSED_DATA_PATH}/risk/depeg_dict.json", "r", encoding="utf-8") as f:
+with open(
+    f"{PROCESSED_DATA_PATH}/risk/depeg_dict_slashing.json", "r", encoding="utf-8"
+) as f:
     depeg_dict = json.load(f)
 
 for event, date in SAMPLE_DATA_DICT.items():
@@ -130,8 +134,8 @@ for event, date in SAMPLE_DATA_DICT.items():
         )
         plt.subplots_adjust(left=0.25)
         plt.tight_layout()
-        plt.savefig(
-            f"{FIGURE_PATH}/sensitivity_{event}_{PARAMS_NAMEING_MAPPING[params]}.pdf",
-            dpi=2000,
-        )
+        # plt.savefig(
+        #     f"{FIGURE_PATH}/sensitivity_{event}_{PARAMS_NAMEING_MAPPING[params]}_slashing.pdf",
+        #     dpi=2000,
+        # )
         plt.show()

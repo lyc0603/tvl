@@ -108,6 +108,13 @@ SAMPLE_DATA_DICT = {
     # "current_date": "2024-03-01",
 }
 
+EVENT_MAPPING = {
+    "max_tvl": "Maximum TVL",
+    "luna_collapse": "Luna Collapse",
+    "ftx_collapse": "FTX Collapse",
+}
+
+
 # Coingecko API KEY
 COINGECKO_API_KEY = "CG-p19fJQK2mNHmCaZsjAXPSndt"
 
