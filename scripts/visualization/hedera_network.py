@@ -76,6 +76,9 @@ for event, date in SAMPLE_DATA_DICT.items():
     cbar.ax.tick_params(labelsize=20)
     cbar.set_label(r"$\frac{TVL}{TVR}$", rotation=270, labelpad=40, fontsize=20)
 
+    # remove the frame
+    plt.axis("off")
+
     plt.tight_layout()
     plt.savefig(
         f"{FIGURE_PATH}/hedera_network_{event}.pdf",

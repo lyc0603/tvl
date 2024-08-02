@@ -41,7 +41,7 @@ for num_node_operator in range(1, 4, 1):
         depeg_dict = json.load(f)
 
     # figure size
-    fig, axes = plt.subplots(figsize=(6, 4))
+    fig, axes = plt.subplots(figsize=(9, 4))
     ls_list = []
 
     for event_idx, (event, date) in enumerate(SAMPLE_DATA_DICT.items()):
@@ -108,7 +108,7 @@ for num_node_operator in range(1, 4, 1):
     axes.yaxis.label.set_size(12)
 
     # set the x axis range
-    axes.xaxis.set_label_coords(0, -0.08)
+    axes.xaxis.set_label_coords(0.15, -0.08)
 
     # increase the font size
     plt.xticks(fontsize=16)
