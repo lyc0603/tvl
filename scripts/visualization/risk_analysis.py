@@ -131,6 +131,6 @@ for event, date in SAMPLE_DATA_DICT.items():
         plt.subplots_adjust(left=0.25)
         plt.tight_layout()
         plt.savefig(
-            f"{FIGURE_PATH}/sensitivity_{event}_{PARAMS_NAMEING_MAPPING[params]}_slashing.pdf",
+            f"{FIGURE_PATH}/sensitivity_{event}_{PARAMS_NAMEING_MAPPING[params]}.pdf",
             dpi=2000,
         )
