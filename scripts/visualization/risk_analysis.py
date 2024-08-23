@@ -19,17 +19,13 @@ COLOR_LIST = ["red", "darkblue", "green"]
 PARAMS_NAMEING_MAPPING = {
     "$\\delta_{MKR}$": "mkr_c",
     "$\\delta_{AAVE}$": "aave_c",
-    "$\\psi_{1,AAVE}$": "aave_t",
+    "$gasFees$": "gas",
 }
 
-with open(
-    f"{PROCESSED_DATA_PATH}/risk/risk_dict_slashing.json", "r", encoding="utf-8"
-) as f:
+with open(f"{PROCESSED_DATA_PATH}/risk/risk_dict.json", "r", encoding="utf-8") as f:
     risk_dict = json.load(f)
 
-with open(
-    f"{PROCESSED_DATA_PATH}/risk/depeg_dict_slashing.json", "r", encoding="utf-8"
-) as f:
+with open(f"{PROCESSED_DATA_PATH}/risk/depeg_dict.json", "r", encoding="utf-8") as f:
     depeg_dict = json.load(f)
 
 for event, date in SAMPLE_DATA_DICT.items():

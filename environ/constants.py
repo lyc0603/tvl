@@ -102,10 +102,10 @@ LLAMA_STABLE = "https://stablecoins.llama.fi/stablecoins?includePrices=true"
 
 # sample date
 SAMPLE_DATA_DICT = {
-    # "max_tvl": "2021-12-26",
-    # "luna_collapse": "2022-05-09",
-    # "ftx_collapse": "2022-11-08",
-    "current_date": "2024-03-01",
+    "max_tvl": "2021-12-26",
+    "luna_collapse": "2022-05-09",
+    "ftx_collapse": "2022-11-08",
+    # "current_date": "2024-03-01",
 }
 
 EVENT_MAPPING = {
@@ -143,6 +143,15 @@ ETH_PRICE_DICT = {
     "ftx_collapse": 1334.29,
     "current_date": 1934.05,
 }
+
+# GAS fee
+GAS_FEE_DICT = {
+    "max_tvl": 4.85e-4,
+    "luna_collapse": 1.50e-4,
+    "ftx_collapse": 7.60e-5,
+}
+
+GAS_USED = 500_000
 
 PLAIN_TOKEN_LIST_PLF = [
     # TUSD
@@ -211,16 +220,21 @@ params_dict = {
     "$\\delta_{MKR}$": {
         "$\\delta_{MKR}$": [1, 0.75, 0.5],
         "$\\delta_{AAVE}$": [0.5, 0.5, 0.5],
-        "$\\psi_{1,AAVE}$": [0, 0, 0],
+        "$gasFees$": [1, 1, 1],
     },
     "$\\delta_{AAVE}$": {
         "$\\delta_{MKR}$": [1, 1, 1],
         "$\\delta_{AAVE}$": [0.5, 0.75, 1],
-        "$\\psi_{1,AAVE}$": [0, 0, 0],
+        "$gasFees$": [1, 1, 1],
     },
-    "$\\psi_{1,AAVE}$": {
+    # "$\\psi_{1,AAVE}$": {
+    #     "$\\delta_{MKR}$": [1, 1, 1],
+    #     "$\\delta_{AAVE}$": [0.5, 0.5, 0.5],
+    #     "$\\psi_{1,AAVE}$": [0, 0.90, 0.95],
+    # },
+    "$gasFees$": {
         "$\\delta_{MKR}$": [1, 1, 1],
         "$\\delta_{AAVE}$": [0.5, 0.5, 0.5],
-        "$\\psi_{1,AAVE}$": [0, 0.90, 0.95],
+        "$gasFees$": [0.1, 1, 10],
     },
 }
