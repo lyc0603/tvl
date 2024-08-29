@@ -218,7 +218,7 @@ PLAIN_TOKEN_LIST_PLF = [
 
 params_dict = {
     "$\\delta_{MKR}$": {
-        "$\\delta_{MKR}$": [1, 0.75, 0.5],
+        "$\\delta_{MKR}$": [0.5, 0.75, 1],
         "$\\delta_{AAVE}$": [0.5, 0.5, 0.5],
         "$gasFees$": [1, 1, 1],
     },
