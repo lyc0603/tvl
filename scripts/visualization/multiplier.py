@@ -91,7 +91,7 @@ PLOT_DICT = {
 }
 
 # plot the leverage ratio and eth price in two different y axis
-fig, ax1 = plt.subplots(figsize=(7, 3))
+fig, ax1 = plt.subplots(figsize=(5.5, 2))
 ax1.plot(
     df_agg["date"],
     df_agg["leverage_ratio"],
@@ -102,7 +102,9 @@ ax1.plot(
     linewidth=PLOT_DICT["leverage_ratio"]["linewidth"],
 )
 
-ax1.set_ylabel("DeFi Money Multiplier", color=PLOT_DICT["leverage_ratio"]["color"])
+ax1.set_ylabel(
+    "DeFi Money Multiplier", color=PLOT_DICT["leverage_ratio"]["color"], fontsize=6
+)
 ax1.tick_params(axis="y", labelcolor=PLOT_DICT["leverage_ratio"]["color"])
 
 plt.xticks(rotation=90)
@@ -110,7 +112,7 @@ plt.gca().xaxis.set_major_formatter(
     mdates.DateFormatter("%Y-%m"),
 )
 plt.gca().xaxis.set_major_locator(
-    mdates.MonthLocator(interval=2),
+    mdates.MonthLocator(interval=3),
 )
 
 ax2 = ax1.twinx()
@@ -153,7 +155,7 @@ for event, date in SAMPLE_DATA_DICT.items():
         EVENT_INFO_DICT[event]["label"],
         rotation=90,
         # backgroundcolor="white",
-        fontsize=10,
+        fontsize=5,
         horizontalalignment="center",
         verticalalignment="bottom",
         # alpha=0.8,

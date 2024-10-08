@@ -183,3 +183,4 @@ for event, date in SAMPLE_DATA_DICT.items():
                 "slashing": range(0, 101, 1),
                 "loss": df_result["%_of_lido_deposits"].values.tolist(),
             }
+    print(validatorscount_current)
