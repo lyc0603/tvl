@@ -146,27 +146,24 @@ for event, date in SAMPLE_DATA_DICT.items():
         pd.to_datetime(date),
         color="black",
         linewidth=1,
-        # label=EVENT_INFO_DICT[event]["label"],
+        label=EVENT_INFO_DICT[event]["label"],
         ls=EVENT_INFO_DICT[event]["ls"],
     )
-    plt.text(
-        pd.to_datetime(date),
-        0,
-        EVENT_INFO_DICT[event]["label"],
-        rotation=90,
-        # backgroundcolor="white",
-        fontsize=5,
-        horizontalalignment="center",
-        verticalalignment="bottom",
-        # alpha=0.8,
-        # backgroundcolor needs transparency
-    )
+
+plt.legend(
+    frameon=False,
+    loc="upper left",
+    prop={"size": 7},
+    title="Events",
+    title_fontsize="8",
+)
 
 # # show the legend on the upper right corner
 # plt.legend(prop={"size": 6})
 
-# add the grid and increase the opacity and increase the intensity
-plt.grid(alpha=0.3)
+# add the grid for two y axis
+ax1.grid(alpha=0.3)
+ax2.grid(alpha=0.3)
 
 # set the x limit to 2019-06-01
 plt.xlim(
