@@ -37,13 +37,21 @@ for event, date in SAMPLE_DATA_DICT.items():
 
         for params_idx, target_params in enumerate(params_grid[params]):
             target_params = str(target_params)
+
+            if params != "$gasFees$":
+                label = f"{target_params}"
+            elif target_params != "1":
+                label = r"$" + f"{target_params}" + r"\overline{gasFees}$"
+            else:
+                label = r"$\overline{gasFees}$"
+
             # figure size
             axes.plot(
                 risk_dict[params][target_params][event]["eth_decline_pct"],
                 risk_dict[params][target_params][event]["tvl_drop"],
                 ls="-",
                 color=COLOR_LIST[params_idx],
-                label=f"{target_params}",
+                label=label,
             )
 
             axes.plot(
@@ -51,10 +59,10 @@ for event, date in SAMPLE_DATA_DICT.items():
                 risk_dict[params][target_params][event]["tvr_drop"],
                 ls="dashed",
                 color=COLOR_LIST[params_idx],
-                label=f"{target_params}",
+                label=label,
             )
 
-            ls_list.append(f"{target_params}")
+            ls_list.append(label)
 
         for params_idx, target_params in enumerate(params_grid[params]):
             target_params = str(target_params)
