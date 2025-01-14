@@ -13,9 +13,10 @@ lido_eth.set_index("date", inplace=True)
 
 lido_eth["Receivables"] = lido_eth["tvl"]
 lido_eth["Payables"] = 0
-lido_eth.rename(columns={"tvl": "TVL"}, inplace=True)
+lido_eth.rename(columns={"tvl": "TVL", "unadj_tvl": "Unadjusted TVL"}, inplace=True)
 
 # AAVE
 aave = pd.read_csv(DATA_PATH / "ind_tvl" / "aave.csv")
 aave["date"] = pd.to_datetime(aave["date"])
+aave["Unadjusted TVL"] = aave["Receivables"]
 aave.set_index("date", inplace=True)

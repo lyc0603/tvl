@@ -32,10 +32,18 @@ for df, name in [(lido_eth, "lido"), (aave, "aave")]:
     plt.plot(
         df.index,
         df["TVL"],
-        color="#1f77b4",
+        color="black",
         linestyle="-",
         linewidth=2,
         label="Protocol-Level TVR",
+    )
+    plt.plot(
+        df.index,
+        df["Unadjusted TVL"],
+        color="#1f77b4",
+        linestyle="-",
+        linewidth=2,
+        label="Unadjusted TVL",
     )
 
     # remove "token" from the legend
@@ -59,7 +67,7 @@ for df, name in [(lido_eth, "lido"), (aave, "aave")]:
 
     # limit setting
     plt.xlim(df.index.min(), df.index.max())
-    plt.ylim(-df["Receivables"].max() * 0.5, df["Receivables"].max() * 1.1)
+    plt.ylim(-1e10, df["Receivables"].max() * 1.1)
 
     # add x , y label
     plt.xlabel("")
