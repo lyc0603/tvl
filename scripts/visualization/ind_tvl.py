@@ -35,7 +35,7 @@ for df, name in [(lido_eth, "lido"), (aave, "aave")]:
         color="#1f77b4",
         linestyle="-",
         linewidth=2,
-        label="Protocol TVL",
+        label="Protocol-Level TVR",
     )
 
     # remove "token" from the legend

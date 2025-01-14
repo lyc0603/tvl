@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 from environ.constants import DATA_PATH
 from environ.fetch.aave import AaveV2
-from environ.fetch.lido import Lido
+from environ.fetch.lido import Lido, WSTETH_ADDRESS
 from environ.fetch.w3 import w3, token_decimal
 import matplotlib.pyplot as plt
 
@@ -41,21 +41,23 @@ date_range = pd.read_csv(DATA_PATH / "date_to_block.csv")
 
 lido_eth_date_range = date_range.loc[date_range["block"] >= 11473216, ["block", "date"]]
 
-lido_eth = {"date": [], "lido": []}
+lido_eth = {"date": [], "eth": [], "steth": []}
 
 for index, row in tqdm(lido_eth_date_range.iterrows(), total=len(lido_eth_date_range)):
     block = row["block"]
     date = row["date"]
 
     lido_eth["date"].append(date)
-    lido_eth["lido"].append(lido.get_total_pooled_ether(block))
+    lido_eth["eth"].append(lido.get_total_pooled_ether(block))
+    lido_eth["steth"].append(lido.balance_of_steth(WSTETH_ADDRESS, block))
 
 lido_eth = pd.DataFrame(lido_eth)
 
 eth_price = parse_token_prc("ethereum")
 
 lido_eth = lido_eth.merge(eth_price, left_on="date", right_on="timestamp")
-lido_eth["tvl"] = lido_eth["lido"] * lido_eth["price"]
+lido_eth["tvl"] = lido_eth["eth"] * lido_eth["price"]
+lido_eth["unadj_tvl"] = (lido_eth["eth"] + lido_eth["steth"]) * lido_eth["price"]
 lido_eth["date"] = pd.to_datetime(lido_eth["date"])
 
 # LIDO STETH
@@ -86,6 +88,7 @@ lido_matic["date"] = pd.to_datetime(lido_matic["date"])
 lido_tvl = {
     "date": [],
     "tvl": [],
+    "unadj_tvl": [],
 }
 
 for index, row in tqdm(lido_eth.iterrows(), total=len(lido_eth)):
@@ -95,8 +98,13 @@ for index, row in tqdm(lido_eth.iterrows(), total=len(lido_eth)):
         lido_tvl["tvl"].append(
             row["tvl"] + lido_matic.loc[lido_matic["date"] == date, "tvl"].values[0]
         )
+        lido_tvl["unadj_tvl"].append(
+            row["unadj_tvl"]
+            + lido_matic.loc[lido_matic["date"] == date, "tvl"].values[0]
+        )
     else:
         lido_tvl["tvl"].append(row["tvl"])
+        lido_tvl["unadj_tvl"].append(row["unadj_tvl"])
 
 lido_tvl = pd.DataFrame(lido_tvl)
 lido_tvl.to_csv(DATA_PATH / "ind_tvl" / "lido.csv", index=False)

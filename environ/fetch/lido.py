@@ -93,4 +93,5 @@ if __name__ == "__main__":
     from scripts.w3 import w3
 
     ptc = Lido(w3)
-    pprint(ptc.get_total_pooled_matic("latest"))
+    # pprint(ptc.get_total_pooled_matic("latest"))
+    pprint(ptc.token_breakdown("latest"))
