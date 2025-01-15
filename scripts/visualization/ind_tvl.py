@@ -11,13 +11,13 @@ from scripts.process.ind_tvl import aave, lido_eth
 
 for df, name in [(lido_eth, "lido"), (aave, "aave")]:
     # plot the area chart
-    plt.figure(figsize=(6, 3))
+    plt.figure(figsize=(6, 3.5))
     plt.fill_between(
         df.index,
         df["Receivables"],
         color="g",
         alpha=0.6,
-        label="Total Receivables",
+        label="Total Receivables" if name == "lido" else None,
     )
 
     plt.fill_between(
@@ -25,7 +25,7 @@ for df, name in [(lido_eth, "lido"), (aave, "aave")]:
         -df["Payables"],
         color="r",
         alpha=0.6,
-        label="Total Payables",
+        label="Total Payables" if name == "lido" else None,
     )
 
     # plot the line chart
@@ -35,7 +35,7 @@ for df, name in [(lido_eth, "lido"), (aave, "aave")]:
         color="black",
         linestyle="-",
         linewidth=2,
-        label="Protocol-Level TVR",
+        label="Protocol-Level TVR" if name != "lido" else None,
     )
     plt.plot(
         df.index,
@@ -43,11 +43,18 @@ for df, name in [(lido_eth, "lido"), (aave, "aave")]:
         color="#1f77b4",
         linestyle="-",
         linewidth=2,
-        label="Unadjusted TVL",
+        label="Unadjusted TVL" if name != "lido" else None,
     )
 
     # remove "token" from the legend
-    plt.legend(loc="upper left", ncol=2, title="", fontsize=12, frameon=False)
+    plt.legend(
+        loc="upper center",
+        bbox_to_anchor=(0.5, 1.2),
+        ncol=2,
+        title="",
+        fontsize=12,
+        frameon=False,
+    )
 
     # x axis in the format of %Y-%m-%d
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
