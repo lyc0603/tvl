@@ -15,9 +15,9 @@ fig, axes = plt.subplots(
 )
 
 PLOT_INFO_DICT = {
-    "totalLiquidityUSD": {"label": "$TVL_t$", "color": "red"},
-    "tvl": {"label": "$TVL^{Adj}_{t}$", "color": "blue"},
-    "tvr": {"label": "$TVR_t$", "color": "black"},
+    "totalLiquidityUSD": {"label": "$TVL$", "color": "red"},
+    "tvl": {"label": "$TVL^{\mathrm{Adj}}$", "color": "blue"},
+    "tvr": {"label": "$TVR$", "color": "black"},
 }
 
 EVENT_INFO_DICT = {
@@ -116,7 +116,7 @@ for chain in CHAIN_LIST:
     # set the unit of the y axis
     plt.gca().yaxis.get_major_formatter().set_useOffset(False)
     plt.gca().yaxis.set_major_formatter(
-        plt.FuncFormatter(lambda x, loc: "{:.0f}B".format(x / 1e9))
+        plt.FuncFormatter(lambda x, loc: "${:.0f} billion".format(x / 1e9))
     )
     plt.gca().yaxis.set_major_locator(ticker.MultipleLocator(base=50e9))
 
